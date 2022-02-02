@@ -1,0 +1,6 @@
+# when updating this file, make sure to update `BPF_SRCFILES_IGNORE` in `Makefile.defs`
+cilium-map-migrate
+cilium-probe-kernel-hz
+*.i
+*.s
+.rebuild_all

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to Windows Server 1!</title>
+<meta http-equiv="refresh" content="3">
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1 style="color:magenta;">eBPF for Windows FTW!!</h1>
+<p style="color:magenta;font-size:25px;">You have reached Windows Server 1</p>
+<p style="color:purple;font-size:20px;"><b>Backend IP: 20.1.1.10</b></p>
+<p>Date/Time: <span id="datetime"></span></p>
+<p>Try force refreshing the page to reach another backend server.</p>
+
+<script>
+var dt = new Date();
+document.getElementById("datetime").innerHTML = dt.toLocaleString();
+</script>
+
+</body>
+</html>

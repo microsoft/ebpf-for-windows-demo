@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32002.261
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cilium", "cilium", "{5892EB58-3D98-4943-BDA7-CCC51165900F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "daemon", "cilium\load_balancer\daemon\daemon.vcxproj", "{FB0E7D33-75F8-4472-8AA3-891CB657AE06}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bpf_xdp", "cilium\load_balancer\bpf\bpf_xdp\bpf_xdp.vcxproj", "{742B767C-02C3-4D5A-81A9-232D57262388}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB0E7D33-75F8-4472-8AA3-891CB657AE06}.Debug|x64.ActiveCfg = Debug|x64
+		{FB0E7D33-75F8-4472-8AA3-891CB657AE06}.Debug|x64.Build.0 = Debug|x64
+		{FB0E7D33-75F8-4472-8AA3-891CB657AE06}.Debug|x86.ActiveCfg = Debug|Win32
+		{FB0E7D33-75F8-4472-8AA3-891CB657AE06}.Debug|x86.Build.0 = Debug|Win32
+		{FB0E7D33-75F8-4472-8AA3-891CB657AE06}.Release|x64.ActiveCfg = Release|x64
+		{FB0E7D33-75F8-4472-8AA3-891CB657AE06}.Release|x64.Build.0 = Release|x64
+		{FB0E7D33-75F8-4472-8AA3-891CB657AE06}.Release|x86.ActiveCfg = Release|Win32
+		{FB0E7D33-75F8-4472-8AA3-891CB657AE06}.Release|x86.Build.0 = Release|Win32
+		{742B767C-02C3-4D5A-81A9-232D57262388}.Debug|x64.ActiveCfg = Debug|x64
+		{742B767C-02C3-4D5A-81A9-232D57262388}.Debug|x64.Build.0 = Debug|x64
+		{742B767C-02C3-4D5A-81A9-232D57262388}.Debug|x86.ActiveCfg = Debug|Win32
+		{742B767C-02C3-4D5A-81A9-232D57262388}.Debug|x86.Build.0 = Debug|Win32
+		{742B767C-02C3-4D5A-81A9-232D57262388}.Release|x64.ActiveCfg = Release|x64
+		{742B767C-02C3-4D5A-81A9-232D57262388}.Release|x64.Build.0 = Release|x64
+		{742B767C-02C3-4D5A-81A9-232D57262388}.Release|x86.ActiveCfg = Release|Win32
+		{742B767C-02C3-4D5A-81A9-232D57262388}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FB0E7D33-75F8-4472-8AA3-891CB657AE06} = {5892EB58-3D98-4943-BDA7-CCC51165900F}
+		{742B767C-02C3-4D5A-81A9-232D57262388} = {5892EB58-3D98-4943-BDA7-CCC51165900F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DF6FB969-B489-49DA-8DB0-6FD7BA56D5D2}
+	EndGlobalSection
+EndGlobal
