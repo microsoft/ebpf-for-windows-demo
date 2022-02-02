@@ -1,14 +1,12 @@
-# Project
+# eBPF for Windows Demos
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+This repository is the home for various demos projects built on top of ebpf-for-windows platform.
 
-As the maintainer of this project, please make a few updates:
+Use the [Getting Started](docs/GettingStarted.md) guide for first time setup of this project.
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+Following links contain more details and the setup steps for the different demo projects.
+
+- [Cilium L4 Load Balancer using eBPF for Windows](cilium/load_balancer/docs/CiliumL4LBSetup.md)
 
 ## Contributing
 
