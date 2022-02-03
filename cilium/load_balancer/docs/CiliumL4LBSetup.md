@@ -46,7 +46,7 @@ To clone and build this project, follow the steps mentioned in the [Getting Star
 
 The above guide provides steps to build both the `eBPF-for-Windows` submodule and the `eBPF-for-Windows-Demo` project.
 
-Once both the projects have been built, following will be location of the build output:
+Once both the projects have been built, following will be location of the build outputs:
 1. `eBPF-for-Windows`: files will be present in `external\ebpf-for-windows\x64\Release`
 2. `eBPF-for-Windows-Demo`: files will be present in `x64\Release`
 
@@ -68,12 +68,12 @@ The demo will use ```40.1.1.1``` as the LB VIP.
 
 #### Setup LB node
 
-The Ciloum XDP code takes the various interface properties as compile time macros, hence the XDP program needs to be compiled on the machine where it has to be loaded and attached. In the case of this demo, the XDP program needs to be compiled on the LB node.
+The Cilium XDP code takes the various interface properties as compile time macros, hence the XDP program needs to be compiled on the machine where it has to be loaded and attached. In the case of this demo, the XDP program needs to be compiled on the LB node.
 
 The following steps describe how to setup the LB node VM:
 1. Install [Clang 10.0](https://github.com/llvm/llvm-project/releases/tag/llvmorg-10.0.0). Download ``LLVM-10.0.0-win64.exe``
-2. Ensure Clang is added to system path.
-3. Enable test signing by running command ``"bcdedit -set testsigning on"``
+2. Ensure Clang is added to system PATH.
+3. Enable test signing by running command ``"bcdedit -set testsigning on"``. This command needs to be run as Administrator.
 4. Create a folder ``C:\ebpf`` on the LB node.
 5.  Copy all the files from the 2 build directories (for `ebpf-for-windows` and `ebpf-for-windows-demo`) mentioned in the previous section to ``C:\ebpf``
 5. Go to ``C:\ebpf`` and execute ``"install_ebpf.bat"``. This will install the ebpf-for-Windows framework on the LB node.
@@ -82,18 +82,18 @@ The following steps describe how to setup the LB node VM:
 
 This section describes how to configure the Windows backend nodes. For DSR mode, backend nodes will receive an IP-in-IP packet, and we need some eBPF program to decap those packets. On Windows backend nodes, the demo will use an XDP sample program (ebpf-for-windows/decap_permit_packet.c at master · microsoft/ebpf-for-windows (github.com) to decap IP-in-IP packets. The sample is present in eBPF-for-Windows project. Following are the steps to setup the Windows backend nodes:
 
-1. Enable test signing on the node by running command ``"bcdedit -set testsigning on"``
+1. Enable test signing on the node by running command ``"bcdedit -set testsigning on"``. This command needs to be run as Administrator.
 2. Create a folder ``C:\ebpf`` and copy the all the files from the `ebpf-for-windows` build directory mentioned above to ``C:\ebpf``
 3. Go to ``C:\ebpf`` and execute ``"install_ebpf.bat"``. This will install the ebpf-for-Windows framework.
 4. Load the XDP decap program using command ``netsh ebpf add program decap_permit_packet.o pinpath=ipip_decap``
 5. Add VIP ``40.1.1.1`` to loopback interface.
 6. Enable ``weakhost send`` and ``weakhost receive`` on both loopback and the external interface using the following command: ``Set-NetIPInterface -ifIndex <ifindex> -WeakHostSend Enabled -WeakHostReceive Enabled``
 7. Once ebpf is installed on Windows backend node, install IIS on the Windows backend from the server manager and configure a website. 
-8. A sample html page is present in the repository [here](../html/index.html). This sample can be used and modified for each backend node for this demo.
+8. A sample html page is present in this repository [here](../html/index.html). This sample can be modified and used for each backend node in this demo.
 
 #### Setup Linux Backend Node(s)
 
-As with Windows backend node, for DSR mode, the Linux backend node also requires some eBPF program to decap IP-in-IP packets. The demo uses a TC based eBPF program to decap the IP-in-IP packets. The sample eBPF program is available in [Cilium repository here](https://github.com/cilium/cilium/blob/ba4e73d86dc36f5c5cbe5f17cf00b07ba4a983ff/test/l4lb/test_tc_tunnel.c). A compiled object file (compiled on Ubuntu Linux) is also checked-in in the repository [here](../decap/test_tc_tunnel.o).
+As with Windows backend node, for DSR mode, the Linux backend node also requires some eBPF program to decap IP-in-IP packets. The demo uses a TC based eBPF program to decap the IP-in-IP packets. The sample eBPF program is available in [Cilium repository here](https://github.com/cilium/cilium/blob/ba4e73d86dc36f5c5cbe5f17cf00b07ba4a983ff/test/l4lb/test_tc_tunnel.c). A compiled object file (compiled on Ubuntu Linux) is also checked-in in this repository [here](../decap/test_tc_tunnel.o).
 
 Following are the steps / commands to setup the Linux backend node:
 1. Install nginx and setup a basic web page. The sample web page can be used to create the basic web page.
