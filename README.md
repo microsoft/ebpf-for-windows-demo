@@ -1,6 +1,6 @@
 # eBPF for Windows Demos
 
-This repository is the home for various demos projects built on top of ebpf-for-windows platform.
+This repository is the home for various demo projects built on top of ebpf-for-windows platform.
 
 Use the [Getting Started](docs/GettingStarted.md) guide for first time setup of this project.
 
