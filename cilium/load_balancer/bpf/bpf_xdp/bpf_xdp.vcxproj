@@ -132,9 +132,12 @@
 xcopy $(SolutionDir)external\ebpf-for-windows\include\* $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)external\ebpf-for-windows\external\ebpf-verifier\src\ebpf_base.h $(SolutionDir)$(Platform)\$(Configuration)\external\ebpf-verifier\src\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\windows_types.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
+xcopy $(SolutionDir)cilium\load_balancer\stdint.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
+xcopy $(SolutionDir)cilium\load_balancer\guiddef.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\bpf\node_config_static.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
 xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_snat.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
-xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y</Command>
+xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -157,6 +160,8 @@ xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$
 xcopy $(SolutionDir)external\ebpf-for-windows\include\* $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)external\ebpf-for-windows\external\ebpf-verifier\src\ebpf_base.h $(SolutionDir)$(Platform)\$(Configuration)\external\ebpf-verifier\src\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\windows_types.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
+xcopy $(SolutionDir)cilium\load_balancer\stdint.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
+xcopy $(SolutionDir)cilium\load_balancer\guiddef.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\bpf\node_config_static.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
 xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_snat.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
 xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y</Command>

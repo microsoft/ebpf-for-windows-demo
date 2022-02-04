@@ -1,28 +1,24 @@
+// Copyright (c) Microsoft Corporation
+// SPDX-License-Identifier: MIT
+#pragma once
+
 // This header file contains definitions in order to compile the bpf program.
 
-#pragma once
+#include "stdint.h"
+#include "bpf_helpers_platform.h"
 
 #ifndef __BPF_TYPES_MAPPER__
 #define __BPF_TYPES_MAPPER__
 typedef unsigned char __u8;
-typedef unsigned short __u16;
-typedef unsigned int __u32;
-typedef unsigned long long __u64;
-
-typedef __u16 __be16;
-typedef __u32 __be32;
-typedef __u64 u64;
 #endif
 
-typedef unsigned long long uint64_t;
-typedef unsigned char uint8_t;
-typedef unsigned int uint32_t;
-typedef unsigned short uint16_t;
-
-typedef long long int64_t;
-typedef char int8_t;
-typedef int int32_t;
-typedef short int16_t;
+typedef __u16 __sum16;
+typedef __u16 __le16;
+typedef __u32 __le32;
+typedef __u64 __le64;
+typedef __u64 __be64;
+typedef __u64 __net_cookie;
+typedef __u64 __sock_cookie;
 
 #ifndef UNREFERENCED_PARAMETER
 #define UNREFERENCED_PARAMETER(x) (x)

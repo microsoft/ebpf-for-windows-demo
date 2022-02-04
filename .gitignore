@@ -17,8 +17,6 @@
 /**/*.exe
 /**/*.dll
 /**/*.o
-!bpf_xdp_dsr.o
-!bpf_xdp_snat.o
 !test_tc_tunnel.o
 /**/*.hi
 /**/*.class
