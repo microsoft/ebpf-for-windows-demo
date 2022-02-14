@@ -52,12 +52,13 @@ Once both the projects have been built, following will be location of the build 
 
 ### Prepare Demo Setup
 
-For demonstration, 1 VM is required for the load balancer and a few VMs for backend nodes. The backend nodes can be either Windows VMs or Linux VMs or a mix of both. This document assumes there are 4 backend VMs - 2 Windows VMs and 2 Linux VMs. Hence there are 5 VMs in total. All the VMs are on the same host and connected via an internal switch. Since it is an internal switch, the host is also connected to the VMs and will be used as a client to initiate traffic.
+For demonstration, 1 Windows Server VM is required for the load balancer and a few VMs are required for the backend nodes. Backend nodes can be either Windows VMs or Linux VMs or a mix of both. This document assumes there are 4 backend VMs - 2 Windows VMs and 2 Linux VMs. Hence there are 5 VMs in total. All the VMs are on the same host and connected via an internal switch. Since it is an internal switch, the host is also connected to the VMs and will be used as a client to initiate traffic.
 
 **Note**: The number and type (Windows vs. Linux) of backend VMs can be changed accordingly for a demo.
 
 #### Create VMs
 
+To prepare the Windows host and the Windows VMs required for this demo, an evalutation version of Windows Server 2022 can also be used which is available for download [here](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2022). Please note that this is an evaluation version and is valid for a limited time only. To prepare Linux VMs, Ubuntu Linux VM image can be used which is available [here](https://ubuntu.com/download/desktop).
 1. Create an internal switch on the host and assign IP ``20.1.1.100`` to the host vNIC. Host will act as a client.
 2. Create 5 VMs on a single host with one network interface each. 3 of the VMs will be Windows VMs and 2 Linux VMs.
 3. Assign IP ``20.1.1.1`` to the LB node VM
