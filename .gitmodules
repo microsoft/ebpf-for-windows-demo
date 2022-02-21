@@ -1,0 +1,7 @@
+[submodule "external/cilium"]
+	path = external/cilium
+	url = https://github.com/saxena-anurag/cilium.git
+	branch = anurag/cilium_xdp_bpf_code_changes
+[submodule "external/ebpf-for-windows"]
+	path = external/ebpf-for-windows
+	url = https://github.com/microsoft/ebpf-for-windows.git
