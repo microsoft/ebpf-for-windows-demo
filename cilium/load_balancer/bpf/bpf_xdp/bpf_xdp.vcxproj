@@ -139,6 +139,12 @@ xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_snat.h $(SolutionDir)
 xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
 </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>mkdir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object
+clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer -I$(SolutionDir)external\ebpf-for-windows\include -I$(SolutionDir)external\ebpf-for-windows\libs\platform\kernel -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_dsr.o -DEBPF_FOR_WINDOWS -DMODE_DSR
+clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer -I$(SolutionDir)external\ebpf-for-windows\include -I$(SolutionDir)external\ebpf-for-windows\libs\platform\kernel -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_snat.o -DEBPF_FOR_WINDOWS -DMODE_SNAT</Command>
+      <Message>Compile Cilium XDP program for SNAT and DSR</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -165,7 +171,16 @@ xcopy $(SolutionDir)cilium\load_balancer\guiddef.h $(SolutionDir)$(Platform)\$(C
 xcopy $(SolutionDir)cilium\load_balancer\bpf\node_config_static.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
 xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_snat.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
 xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y</Command>
+      <Message>Copy required files to output directory</Message>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>mkdir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object
+clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer -I$(SolutionDir)external\ebpf-for-windows\include -I$(SolutionDir)external\ebpf-for-windows\libs\platform\kernel -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_dsr.o -DEBPF_FOR_WINDOWS -DMODE_DSR
+clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer -I$(SolutionDir)external\ebpf-for-windows\include -I$(SolutionDir)external\ebpf-for-windows\libs\platform\kernel -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_snat.o -DEBPF_FOR_WINDOWS -DMODE_SNAT</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Compile Cilium XDP program for SNAT and DSR</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
