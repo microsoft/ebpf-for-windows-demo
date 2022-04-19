@@ -18,7 +18,7 @@ jobs:
     runs-on: windows-latest
     env:
       # Path to the solution file relative to the root of the project.
-      EBPF_SOLUTION_FILE_PATH: external\ebpf-for-windows\ebpf-for-windows.sln
+      EBPF_SOLUTION_FILE_PATH: ebpf-for-windows.sln
       DEMO_SOLUTION_FILE_PATH: ebpf-for-windows-demo.sln
 
       # Configuration type to build.
