@@ -31,25 +31,16 @@ The following steps need to be executed _once_ before the first build on a new c
 3. ```cmake -S external\ebpf-verifier -B external\ebpf-verifier\build```
 4. ```nuget restore ebpf-for-windows.sln```
 5. ```del external\ebpf-verifier\build\obj\project.assets.json```
+6. Change directroy back to the solution root, e.g. ```cd ..\..\```.
+7. ```cmake -G "Visual Studio 16 2019" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF```
+8. ```nuget restore ebpf-for-windows-demo.sln```
 
 ### Building using Developer Command Prompt for VS 2019
-**Build eBPF-for-Windows solution**
-1. Launch `Developer Command Prompt for VS 2019`.
-2. Change directory to ebpf-for-windows submodule location, e.g. ```cd ebpf-for-windows-demo\external\ebpf-for-windows```.
-3. ```msbuild /m /p:Configuration=Release /p:Platform=x64 ebpf-for-windows.sln```
-
-**Build eBPF-for-Windows-Demo solution**
 1. Launch `Developer Command Prompt for VS 2019`.
 2. Change directory to where the project is cloned, e.g. ```cd ebpf-for-windows-demo```.
 3. ```msbuild /m /p:Configuration=Release /p:Platform=x64 ebpf-for-windows-demo.sln```
 
 ### Building using Visual Studio IDE
-**Build eBPF-for-Windows solution**
-1. Open `ebpf-for-windows.sln` file in `external\ebpf-for-windows`
-2. Switch to Release / x64
-3. Build solution
-
-**Build eBPF-for-Windows-Demo solution**
 1. Open `ebpf-for-windows-demo.sln`
 2. Switch to Release / x64
 3. Build solution
