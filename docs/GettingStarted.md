@@ -31,7 +31,7 @@ The following steps need to be executed _once_ before the first build on a new c
 3. ```cmake -S external\ebpf-verifier -B external\ebpf-verifier\build```
 4. ```nuget restore ebpf-for-windows.sln```
 5. ```del external\ebpf-verifier\build\obj\project.assets.json```
-6. Change directroy back to the solution root, e.g. ```cd ..\..\```.
+6. Change directory back to the solution root, e.g. ```cd ..\..\```.
 7. ```cmake -G "Visual Studio 16 2019" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF```
 8. ```nuget restore ebpf-for-windows-demo.sln```
 

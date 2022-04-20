@@ -62,14 +62,12 @@ jobs:
       run: |
         cd external\ebpf-for-windows
         nuget restore ${{env.EBPF_FOR_WINDOWS_SOLUTION_FILE}}
-        cd ..\..
 
     - name: Create verifier project
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         cd external\ebpf-for-windows
         cmake -G "Visual Studio 16 2019" -S external\ebpf-verifier -B external\ebpf-verifier\build
-        cd ..\..
 
     - name: Create Catch2 project for eBPF-for-Windows-Demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
