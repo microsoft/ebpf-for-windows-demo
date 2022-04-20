@@ -80,7 +80,6 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         nuget restore ${{env.DEMO_SOLUTION_FILE}}
-        cd ..\..
 
     - name: Build eBPF-for-Windows-Demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
