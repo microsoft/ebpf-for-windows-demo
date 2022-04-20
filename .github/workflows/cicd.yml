@@ -18,8 +18,8 @@ jobs:
     runs-on: windows-2019
     env:
       # Solution file names.
-      EBPF_FOR_WINDOWS_SOLUTION_FILE_PATH: ebpf-for-windows.sln
-      DEMO_SOLUTION_FILE_PATH: ebpf-for-windows-demo.sln
+      EBPF_FOR_WINDOWS_SOLUTION_FILE: ebpf-for-windows.sln
+      DEMO_SOLUTION_FILE: ebpf-for-windows-demo.sln
 
       # Configuration type to build.
       # You can convert this to a build matrix if you need coverage of multiple configuration types.
@@ -61,7 +61,7 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         cd external\ebpf-for-windows
-        nuget restore ${{env.EBPF_FOR_WINDOWS_SOLUTION_FILE_PATH}}
+        nuget restore ${{env.EBPF_FOR_WINDOWS_SOLUTION_FILE}}
         cd ..\..
 
     - name: Create verifier project
@@ -71,13 +71,15 @@ jobs:
         cmake -G "Visual Studio 16 2019" -S external\ebpf-verifier -B external\ebpf-verifier\build
         cd ..\..
 
-    - name: Build eBPF-for-Windows
+    - name: Create Catch2 project for eBPF-for-Windows-Demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      # Add additional options to the MSBuild command line here (like platform or verbosity level).
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: |
-        cd external\ebpf-for-windows
-        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=${{env.BUILD_PLATFORM}} /p:Analysis='True' ${{env.EBPF_FOR_WINDOWS_SOLUTION_FILE_PATH}}
+        cmake -G "Visual Studio 16 2019" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF
+
+    - name: Restore NuGet packages for eBPF-for-Windows-Demo
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        nuget restore ${{env.DEMO_SOLUTION_FILE}}
         cd ..\..
 
     - name: Build eBPF-for-Windows-Demo
@@ -98,5 +100,9 @@ jobs:
       uses: actions/upload-artifact@v2.2.4
       with:
         name: x64-${{ matrix.configurations }}-cilium-xdp
-        path: ${{ github.workspace }}/{{env.BUILD_PLATFORM}}/${{env.BUILD_CONFIGURATION}}/cilium/object/*
+        path: ${{ github.workspace }}/{{env.BUILD_PLATFORM}}/{{env.BUILD_CONFIGURATION}}\cilium\object\*
         retention-days: 5
+
+    - name: Run Cilium XDP Tests
+      working-directory: ./${{env.BUILD_PLATFORM}}/${{env.BUILD_CONFIGURATION}}
+      run: ./cilium_test.exe -s
