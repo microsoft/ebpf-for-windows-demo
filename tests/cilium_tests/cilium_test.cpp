@@ -33,7 +33,7 @@ void verify_program(_In_ const char* file, uint32_t expected_section_count)
         }
         section_count++;
         const char* section_name = bpf_program__section_name(program);
-        std::cout << "section name = " << section_name << std::endl;
+        REQUIRE(section_name != nullptr);
 
         REQUIRE(
             (result = ebpf_api_elf_verify_section(
