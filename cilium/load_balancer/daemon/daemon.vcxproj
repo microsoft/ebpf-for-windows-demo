@@ -109,6 +109,11 @@
     <ClInclude Include="service.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ebpf-for-windows\ebpf-for-windows.vcxproj">
+      <Project>{dd92ad3c-0143-4ba3-9969-27c278e5a653}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
