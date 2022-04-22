@@ -114,7 +114,7 @@
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\ebpf-for-windows\include;$(SolutionDir)external\ebpf-for-windows\libs\api;$(SolutionDir)external\ebpf-for-windows\libs\Platform;$(SolutionDir)external\ebpf-for-windows\libs\Platform\user;$(SolutionDir)external\ebpf-for-windows\libs\thunk;$(SolutionDir)external\catch2\src;$(SolutionDir)tests\include;$(SolutionDir)external\catch2\build\generated-includes;$(SolutionDir)external\ebpf-for-windows\tests\libs\util;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\ebpf-for-windows\include;$(SolutionDir)external\ebpf-for-windows\libs\api;$(SolutionDir)external\ebpf-for-windows\libs\Platform;$(SolutionDir)external\ebpf-for-windows\libs\Platform\user;$(SolutionDir)external\ebpf-for-windows\libs\thunk;$(SolutionDir)external\catch2\src;$(SolutionDir)tests\include;$(SolutionDir)external\catch2\build\generated-includes;$(SolutionDir)external\ebpf-for-windows\tests\libs\util;$(SolutionDir)external\ebpf-for-windows\external\Catch2\src;$(SolutionDir)external\ebpf-for-windows\external\Catch2\build\generated-includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,7 +134,7 @@
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;CONFIG_BPF_JIT_ALWAYS_ON=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\ebpf-for-windows\include;$(SolutionDir)external\ebpf-for-windows\libs\api;$(SolutionDir)external\ebpf-for-windows\libs\Platform;$(SolutionDir)external\ebpf-for-windows\libs\Platform\user;$(SolutionDir)external\ebpf-for-windows\libs\thunk;$(SolutionDir)external\catch2\src;$(SolutionDir)tests\include;$(SolutionDir)external\catch2\build\generated-includes;$(SolutionDir)external\ebpf-for-windows\tests\libs\util;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\ebpf-for-windows\include;$(SolutionDir)external\ebpf-for-windows\libs\api;$(SolutionDir)external\ebpf-for-windows\libs\Platform;$(SolutionDir)external\ebpf-for-windows\libs\Platform\user;$(SolutionDir)external\ebpf-for-windows\libs\thunk;$(SolutionDir)external\catch2\src;$(SolutionDir)tests\include;$(SolutionDir)external\catch2\build\generated-includes;$(SolutionDir)external\ebpf-for-windows\tests\libs\util;$(SolutionDir)external\ebpf-for-windows\external\Catch2\src;$(SolutionDir)external\ebpf-for-windows\external\Catch2\build\generated-includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
