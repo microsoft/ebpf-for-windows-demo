@@ -75,10 +75,15 @@ jobs:
         cd external\ebpf-for-windows
         cmake -G "Visual Studio 16 2019" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF
 
-    - name: Restore NuGet packages for eBPF-for-Windows-Demo
+    - name: Restore NuGet packages for ebpf-for-windows-demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         nuget restore ${{env.DEMO_SOLUTION_FILE}}
+
+    - name: Create catch2 project for ebpf-for-windows-demo
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        cmake -G "Visual Studio 16 2019" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF
 
     - name: Build eBPF-for-Windows-Demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
