@@ -5,3 +5,6 @@
 [submodule "external/ebpf-for-windows"]
 	path = external/ebpf-for-windows
 	url = https://github.com/microsoft/ebpf-for-windows.git
+[submodule "external/Catch2"]
+	path = external/Catch2
+	url = https://github.com/catchorg/Catch2.git
