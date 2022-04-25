@@ -20,8 +20,6 @@
 extern "C"
 {
 #include "ebpf_api.h"
-#include "bpf/bpf.h"
-#include "bpf/libbpf.h"
 }
 #include <io.h>
 #include "map.h"

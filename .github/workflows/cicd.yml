@@ -69,22 +69,28 @@ jobs:
         cd external\ebpf-for-windows
         cmake -G "Visual Studio 16 2019" -S external\ebpf-verifier -B external\ebpf-verifier\build
 
-    - name: Create Catch2 project for eBPF-for-Windows-Demo
+    - name: Create catch2 project
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
+        cd external\ebpf-for-windows
         cmake -G "Visual Studio 16 2019" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF
 
-    - name: Restore NuGet packages for eBPF-for-Windows-Demo
+    - name: Restore NuGet packages for ebpf-for-windows-demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         nuget restore ${{env.DEMO_SOLUTION_FILE}}
+
+    - name: Create catch2 project for ebpf-for-windows-demo
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        cmake -G "Visual Studio 16 2019" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF
 
     - name: Build eBPF-for-Windows-Demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: |
-        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=${{env.BUILD_PLATFORM}} /p:Analysis='True' ${{env.DEMO_SOLUTION_FILE_PATH}}
+        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=${{env.BUILD_PLATFORM}} /p:Analysis='True' ${{env.DEMO_SOLUTION_FILE}}
 
     - name: Upload Build Output
       uses: actions/upload-artifact@v2.2.4

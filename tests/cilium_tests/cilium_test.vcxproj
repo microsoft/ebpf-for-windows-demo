@@ -114,7 +114,7 @@
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\ebpf-for-windows\include;$(SolutionDir)external\ebpf-for-windows\libs\api;$(SolutionDir)external\ebpf-for-windows\libs\Platform;$(SolutionDir)external\ebpf-for-windows\libs\Platform\user;$(SolutionDir)external\ebpf-for-windows\libs\thunk;$(SolutionDir)external\catch2\src;$(SolutionDir)tests\include;$(SolutionDir)external\catch2\build\generated-includes;$(SolutionDir)external\ebpf-for-windows\tests\libs\util;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\ebpf-for-windows\include;$(SolutionDir)external\ebpf-for-windows\libs\api;$(SolutionDir)external\ebpf-for-windows\libs\Platform;$(SolutionDir)external\ebpf-for-windows\libs\Platform\user;$(SolutionDir)external\ebpf-for-windows\libs\thunk;$(SolutionDir)external\catch2\src;$(SolutionDir)tests\include;$(SolutionDir)external\catch2\build\generated-includes;$(SolutionDir)external\ebpf-for-windows\tests\libs\util;$(SolutionDir)external\Catch2\src;$(SolutionDir)external\Catch2\build\generated-includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,7 +134,7 @@
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;CONFIG_BPF_JIT_ALWAYS_ON=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\ebpf-for-windows\include;$(SolutionDir)external\ebpf-for-windows\libs\api;$(SolutionDir)external\ebpf-for-windows\libs\Platform;$(SolutionDir)external\ebpf-for-windows\libs\Platform\user;$(SolutionDir)external\ebpf-for-windows\libs\thunk;$(SolutionDir)external\catch2\src;$(SolutionDir)tests\include;$(SolutionDir)external\catch2\build\generated-includes;$(SolutionDir)external\ebpf-for-windows\tests\libs\util;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)external\ebpf-for-windows\include;$(SolutionDir)external\ebpf-for-windows\libs\api;$(SolutionDir)external\ebpf-for-windows\libs\Platform;$(SolutionDir)external\ebpf-for-windows\libs\Platform\user;$(SolutionDir)external\ebpf-for-windows\libs\thunk;$(SolutionDir)external\catch2\src;$(SolutionDir)tests\include;$(SolutionDir)external\catch2\build\generated-includes;$(SolutionDir)external\ebpf-for-windows\tests\libs\util;$(SolutionDir)external\Catch2\src;$(SolutionDir)external\Catch2\build\generated-includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -174,6 +174,5 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\boost.1.75.0.0\build\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost.1.75.0.0\build\boost.targets'))" />
-    <Error Condition="!Exists('..\..\packages\CatchOrg.Catch.2.8.0\build\native\CatchOrg.Catch.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CatchOrg.Catch.2.8.0\build\native\CatchOrg.Catch.props'))" />
   </Target>
 </Project>
