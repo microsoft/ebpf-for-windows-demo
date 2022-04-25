@@ -14,9 +14,9 @@
 #include "program.h"
 #include "util.h"
 
-
 #define OPTION_LB_MODE 1
 #define OPTION_DEVICE 2
+#define OPTION_DUMMY 3
 
 #define LB_MODE_OPTION_STR "--bpf-lb-mode="
 #define DEVICES_OPTION_STR "--device="
