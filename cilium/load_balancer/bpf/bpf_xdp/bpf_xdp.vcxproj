@@ -4,6 +4,7 @@
   SPDX-License-Identifier: MIT
 -->
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\..\packages\eBPF-for-Windows.0.1.4\build\native\ebpf-for-windows.props" Condition="Exists('..\..\..\..\packages\eBPF-for-Windows.0.1.4\build\native\ebpf-for-windows.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -21,6 +22,9 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -82,11 +86,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\bpf</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\bpf\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\bpf</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\bpf\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -129,8 +133,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(SolutionDir)external\cilium\bpf\* $(SolutionDir)$(Platform)\$(Configuration)\bpf\* /E/Y
-xcopy $(SolutionDir)external\ebpf-for-windows\include\* $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
-xcopy $(SolutionDir)external\ebpf-for-windows\external\ebpf-verifier\src\ebpf_base.h $(SolutionDir)$(Platform)\$(Configuration)\external\ebpf-verifier\src\* /E/Y
+xcopy $(EbpfIncludePath)\* $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\windows_types.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\stdint.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\guiddef.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
@@ -146,9 +149,11 @@ xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$
       </Message>
     </PreBuildEvent>
     <CustomBuildStep>
-      <Command>mkdir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object
-clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer -I$(SolutionDir)external\ebpf-for-windows\include -I$(SolutionDir)external\ebpf-for-windows\libs\platform\kernel -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_dsr.o -DEBPF_FOR_WINDOWS -DMODE_DSR
-clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer -I$(SolutionDir)external\ebpf-for-windows\include -I$(SolutionDir)external\ebpf-for-windows\libs\platform\kernel -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_snat.o -DEBPF_FOR_WINDOWS -DMODE_SNAT</Command>
+      <Command>
+        mkdir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object
+        clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer $(ClangIncludes) -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_dsr.o -DEBPF_FOR_WINDOWS -DMODE_DSR
+        clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer $(ClangIncludes) -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_snat.o -DEBPF_FOR_WINDOWS -DMODE_SNAT
+      </Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>$(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_dsr.o;$(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_snat.o;%(Outputs)</Outputs>
@@ -172,8 +177,7 @@ clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(SolutionDir)external\cilium\bpf\* $(SolutionDir)$(Platform)\$(Configuration)\bpf\* /E/Y
-xcopy $(SolutionDir)external\ebpf-for-windows\include\* $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
-xcopy $(SolutionDir)external\ebpf-for-windows\external\ebpf-verifier\src\ebpf_base.h $(SolutionDir)$(Platform)\$(Configuration)\external\ebpf-verifier\src\* /E/Y
+xcopy $(EbpfIncludePath)\* $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\windows_types.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\stdint.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\guiddef.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
@@ -191,9 +195,11 @@ xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$
       </Message>
     </PreBuildEvent>
     <CustomBuildStep>
-      <Command>mkdir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object
-clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer -I$(SolutionDir)external\ebpf-for-windows\include -I$(SolutionDir)external\ebpf-for-windows\libs\platform\kernel -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_dsr.o -DEBPF_FOR_WINDOWS -DMODE_DSR
-clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer -I$(SolutionDir)external\ebpf-for-windows\include -I$(SolutionDir)external\ebpf-for-windows\libs\platform\kernel -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_snat.o -DEBPF_FOR_WINDOWS -DMODE_SNAT</Command>
+      <Command>
+        mkdir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object
+        clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer $(ClangIncludes) -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_dsr.o -DEBPF_FOR_WINDOWS -DMODE_DSR
+        clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer $(ClangIncludes) -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_snat.o -DEBPF_FOR_WINDOWS -DMODE_SNAT
+      </Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>$(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_dsr.o;$(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_snat.o;%(Outputs)</Outputs>
@@ -201,6 +207,11 @@ clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\..\packages\eBPF-for-Windows.0.1.4\build\native\ebpf-for-windows.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\eBPF-for-Windows.0.1.4\build\native\ebpf-for-windows.props'))" />
+  </Target>
 </Project>
