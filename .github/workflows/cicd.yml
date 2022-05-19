@@ -10,6 +10,12 @@ on:
     - cron: '00 21 * * *'
   pull_request:
 
+concurrency:
+  # Cancel any CI/CD workflow currently in progress for the same PR.
+  # Allow running concurrently with any other commits.
+  group: cicd-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   build:
     strategy:
@@ -18,7 +24,6 @@ jobs:
     runs-on: windows-2019
     env:
       # Solution file names.
-      EBPF_FOR_WINDOWS_SOLUTION_FILE: ebpf-for-windows.sln
       DEMO_SOLUTION_FILE: ebpf-for-windows-demo.sln
 
       # Configuration type to build.
@@ -56,24 +61,6 @@ jobs:
         curl -fsSL -o LLVM10.exe https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/LLVM-10.0.0-win64.exe
         7z x LLVM10.exe -y -o"C:/Program Files/LLVM"
         echo "C:\Program Files\LLVM\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-    - name: Restore NuGet packages
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: |
-        cd external\ebpf-for-windows
-        nuget restore ${{env.EBPF_FOR_WINDOWS_SOLUTION_FILE}}
-
-    - name: Create verifier project
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: |
-        cd external\ebpf-for-windows
-        cmake -G "Visual Studio 16 2019" -S external\ebpf-verifier -B external\ebpf-verifier\build
-
-    - name: Create catch2 project
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: |
-        cd external\ebpf-for-windows
-        cmake -G "Visual Studio 16 2019" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF
 
     - name: Restore NuGet packages for ebpf-for-windows-demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
