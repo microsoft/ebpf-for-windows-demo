@@ -1,22 +1,21 @@
 // Copyright (c) Microsoft Corporation
 // SPDX-License-Identifier: MIT
 
+// Windows.h needs to be the first include to prevent failures in subsequent headers.
 #include <windows.h>
-
-#include <io.h>
-#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <condition_variable>
-#include <mutex>
-
-#include <ip2string.h>
-#include <in6addr.h>
-#include <mstcpip.h>
 
 #include <bpf/bpf.h>
 #include <bpf/libbpf.h>
 #include <ebpf_api.h>
+#include <io.h>
+#include <iostream>
+#include <ip2string.h>
+#include <in6addr.h>
+#include <mstcpip.h>
+#include <string>
+#include <condition_variable>
+#include <mutex>
+#include <unordered_map>
 
 #include "conn_tracker.h"
 
