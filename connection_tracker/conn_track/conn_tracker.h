@@ -9,7 +9,7 @@ typedef struct _ip_address
     union
     {
         uint32_t ipv4;
-        uint32_t ipv6[4];
+        ipv6_address_t ipv6;
     };
 } ip_address_t;
 
