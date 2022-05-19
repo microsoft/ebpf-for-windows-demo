@@ -49,7 +49,7 @@ trim(const std::string& str)
 }
 
 #define MAX_IPV4_ADDRESS_LENGTH 16
-#define MAX_IPv6_ADDRESS_LENGTH 46
+#define MAX_IPV6_ADDRESS_LENGTH 46
 
 std::string
 ip_address_to_string(bool ipv4, const ip_address_t& ip_address)
@@ -62,7 +62,7 @@ ip_address_to_string(bool ipv4, const ip_address_t& ip_address)
         auto end = RtlIpv4AddressToStringA(&addr, buffer.data());
         buffer.resize(end - buffer.data());
     } else {
-        buffer.resize(MAX_IPv6_ADDRESS_LENGTH);
+        buffer.resize(MAX_IPV6_ADDRESS_LENGTH);
         in_addr6 addr;
         memcpy(addr.u.Byte, ip_address.ipv6, sizeof(ip_address.ipv6));
         auto end = RtlIpv6AddressToStringA(&addr, buffer.data());

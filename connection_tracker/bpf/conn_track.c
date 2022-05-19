@@ -74,10 +74,10 @@ sock_ops_to_connection_tuple(bpf_sock_ops_t* ctx, bool ipv4, connection_tuple_t*
     } else {
         void* ip6 = NULL;
         ip6 = ctx->local_ip6;
-        __builtin_memcpy(tuple->src_ip.ipv6, ip6, sizeof(uint32_t) * 4);
+        __builtin_memcpy(tuple->src_ip.ipv6, ip6, sizeof(tuple->src_ip.ipv6));
         tuple->src_port = ctx->local_port;
         ip6 = ctx->remote_ip6;
-        __builtin_memcpy(tuple->dst_ip.ipv6, ip6, sizeof(uint32_t) * 4);
+        __builtin_memcpy(tuple->dst_ip.ipv6, ip6, sizeof(tuple->dst_ip.ipv6));
         tuple->dst_port = ctx->remote_port;
         tuple->protocol = ctx->protocol;
     }
