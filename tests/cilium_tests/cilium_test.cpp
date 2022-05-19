@@ -7,7 +7,7 @@
 
 #include "ebpf_api.h"
 #include "bpf/libbpf.h"
-#include "catch_wrapper.hpp"
+#include "catch2/catch_all.hpp"
 
 #define SAMPLE_PATH "cilium\\object\\"
 #define CILIUM_XDP_SECTIONS_SNAT 10
