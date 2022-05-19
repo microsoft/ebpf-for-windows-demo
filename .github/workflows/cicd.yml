@@ -64,6 +64,14 @@ jobs:
         7z x LLVM10.exe -y -o"C:/Program Files/LLVM"
         echo "C:\Program Files\LLVM\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
+    - name: Cache nuget packages
+      uses: actions/cache@48af2dc4a9e8278b89d7fa154b955c30c6aaab09
+      env:
+        cache-name: cache-nuget-modules
+      with:
+        path: packages
+        key: ${{ runner.os }}-${{env.BUILD_PLATFORM}}-${{env.BUILD_CONFIGURATION}}-${{env.BUILD_ARTIFACT_NAME}}-${{ hashFiles('**/packages.config') }}
+
     - name: Restore NuGet packages for ebpf-for-windows-demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
