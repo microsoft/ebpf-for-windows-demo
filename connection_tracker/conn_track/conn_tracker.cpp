@@ -19,9 +19,9 @@
 
 #include "conn_tracker.h"
 
+#pragma comment(lib, "ebpfapi.lib")
 #pragma comment(lib, "ntdll.lib")
 #pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "ebpfapi.lib")
 
 typedef struct _connection_history
 {
