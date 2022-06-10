@@ -10,7 +10,7 @@ This project demonstrates the following features in eBPF-For-Windows:
 The project provides a real-time list of connections that have been completed along with the source, destination, and duration of each connection.
 
 ## Demo Steps
-### Native eBPF program generation.
+### Native eBPF program generation
 Note: These steps are already performed as part of the build process for the project and are repeated here for clarity.
 
 1) Launch a "Developer Command Prompt for VS 2019".
@@ -22,7 +22,7 @@ Note: These steps are already performed as part of the build process for the pro
 7) This produces the native eBPF program conn_track.sys.
 8) Netsh tools can be used to examine the native eBPF program: ```netsh ebpf show sections conn_track.sys```.
 
-### BPF_PROG_TYPE_SOCK_OPS and BPF_MAP_TYPE_RINGBUF demo.
+### BPF_PROG_TYPE_SOCK_OPS and BPF_MAP_TYPE_RINGBUF demo
 1) Build the ebpf-for-windows-demo as outlined in [Getting Started](https://github.com/microsoft/ebpf-for-windows-demo/blob/main/docs/GettingStarted.md).
 2) [Install eBPF-For-Windows](https://github.com/microsoft/ebpf-for-windows/blob/main/docs/GettingStarted.md#installing-ebpf-for-windows) on the target machine.
 3) Copy conn_track.sys and conn_tracker.exe to the target machine.
@@ -30,7 +30,7 @@ Note: These steps are already performed as part of the build process for the pro
 5) Launch a browser and navigate to any website.
 6) Connection tracker will then show the list of connections.
 
-### Viewing bpf_printk output.
+### Viewing bpf_printk output
 1) Start an ETW session and add the eBPF-For-Windows provider: ```tracelog -start MyTrace -guid ebpf-printk.guid -rt```.
 2) Start a real-time trace consumer: ```tracefmt -rt MyTrace -displayonly -jsonMeta 0```.
 3) Launch conn_tracker.exe.
