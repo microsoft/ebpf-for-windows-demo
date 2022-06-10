@@ -31,7 +31,7 @@ Note: These steps are already performed as part of the build process for the pro
 6) Connection tracker will then show the list of connections.
 
 ### Viewing bpf_printk output.
-1) Start a ETW session and add the eBPF-For-Windows provider: ```tracelog -start MyTrace -guid ebpf-printk.guid -rt```
+1) Start an ETW session and add the eBPF-For-Windows provider: ```tracelog -start MyTrace -guid ebpf-printk.guid -rt```
 2) Start a real-time trace consumer: ```tracefmt -rt MyTrace -displayonly -jsonMeta 0```
 3) Launch conn_tracker.exe.
 4) Launch a browser and navigate to any website.
