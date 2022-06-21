@@ -48,16 +48,16 @@ log_tuple(connection_tuple_t* tuple, bool ipv4, bool connect)
 {
     if (ipv4) {
         if (connect) {
-            bpf_printk("Connnection to %x started", ntohl(tuple->dst_ip.ipv4));
+            bpf_printk("Connnection to %x started on if %ld", ntohl(tuple->dst_ip.ipv4), tuple->interface_luid);
         } else {
-            bpf_printk("Connnection to %x stopped", ntohl(tuple->dst_ip.ipv4));
+            bpf_printk("Connnection to %x stopped on if %ld", ntohl(tuple->dst_ip.ipv4), tuple->interface_luid);
         }
     } else {
         uint64_t* ip = (uint64_t*)tuple->dst_ip.ipv6;
         if (connect) {
-            bpf_printk("Connnection to %llx %llx started", ntohll(ip[0]), ntohll(ip[1]));
+            bpf_printk("Connnection to %llx %llx started on if %ld", ntohll(ip[0]), ntohll(ip[1]), tuple->interface_luid);
         } else {
-            bpf_printk("Connnection to %llx %llx stopped", ntohll(ip[0]), ntohll(ip[1]));
+            bpf_printk("Connnection to %llx %llx stopped on if %ld", ntohll(ip[0]), ntohll(ip[1]), tuple->interface_luid);
         }
     }
 }
@@ -65,12 +65,16 @@ log_tuple(connection_tuple_t* tuple, bool ipv4, bool connect)
 __attribute__((always_inline)) void
 sock_ops_to_connection_tuple(bpf_sock_ops_t* ctx, bool ipv4, connection_tuple_t* tuple)
 {
+    tuple->compartment_id = ctx->compartment_id;
+    tuple->interface_luid = ctx->interface_luid;
+
     if (ipv4) {
         tuple->src_ip.ipv4 = ctx->local_ip4;
         tuple->src_port = ctx->local_port;
         tuple->dst_ip.ipv4 = ctx->remote_ip4;
         tuple->dst_port = ctx->remote_port;
         tuple->protocol = ctx->protocol;
+
     } else {
         void* ip6 = NULL;
         ip6 = ctx->local_ip6;

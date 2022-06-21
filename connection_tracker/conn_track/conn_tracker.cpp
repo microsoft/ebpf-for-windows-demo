@@ -51,7 +51,7 @@ trim(const std::string& str)
 #define MAX_IPV6_ADDRESS_LENGTH 46
 
 std::string
-ip_address_to_string(bool ipv4, const ip_address_t& ip_address)
+ip_address_to_string(bool ipv4, const ip_address_t& ip_address, const uint64_t interface_luid)
 {
     std::string buffer;
     if (ipv4) {
@@ -66,6 +66,7 @@ ip_address_to_string(bool ipv4, const ip_address_t& ip_address)
         memcpy(addr.u.Byte, ip_address.ipv6, sizeof(ip_address.ipv6));
         auto end = RtlIpv6AddressToStringA(&addr, buffer.data());
         buffer.resize(end - buffer.data());
+        buffer += "%" + std::to_string(interface_luid);
     }
 
     return "[" + trim(buffer) + "]";
@@ -84,9 +85,9 @@ conn_track_history_callback(void* ctx, void* data, size_t size)
 
     if (size == sizeof(connection_history_t)) {
         auto history = reinterpret_cast<connection_history_t*>(data);
-        auto source = ip_address_to_string(history->ipv4, history->tuple.src_ip) + ":" +
+        auto source = ip_address_to_string(history->ipv4, history->tuple.src_ip, history->tuple.interface_luid) + ":" +
                       std::to_string(htons(history->tuple.src_port));
-        auto dest = ip_address_to_string(history->ipv4, history->tuple.dst_ip) + ":" +
+        auto dest = ip_address_to_string(history->ipv4, history->tuple.dst_ip, history->tuple.interface_luid) + ":" +
                     std::to_string(htons(history->tuple.dst_port));
         double duration = static_cast<double>(history->end_time);
         duration -= static_cast<double>(history->start_time);
