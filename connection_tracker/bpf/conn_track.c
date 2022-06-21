@@ -97,7 +97,13 @@ handle_connection(bpf_sock_ops_t* ctx, bool ipv4, bool connected)
         uint64_t* start_time = (uint64_t*)bpf_map_lookup_and_delete_elem(&connection_map, &key);
         if (start_time) {
             log_tuple(&key, ipv4, false);
-            connection_history_t history = {key, ipv4, *start_time, now};
+            connection_history_t history;
+            // Memset is required due to padding within this struct.
+            __builtin_memset(&history, 0, sizeof(history));
+            history.tuple = key;
+            history.ipv4 = ipv4;
+            history.start_time = *start_time;
+            history.end_time = now;
             bpf_ringbuf_output(&history_map, &history, sizeof(history), 0);
         }
     }
