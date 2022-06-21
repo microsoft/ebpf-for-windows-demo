@@ -416,90 +416,48 @@ Exit:
     return result;
 }
 
-static int
-ebpf_program_load(
-    _In_z_ const char* file_name,
-    bpf_prog_type prog_type,
-    ebpf_execution_type_t execution_type,
-    _Outptr_result_maybenull_ struct bpf_object** object,
-    _Out_ fd_t* program_fd,
-    _Outptr_opt_result_maybenull_z_ const char** log_buffer)
-{
-    *object = nullptr;
-    *program_fd = ebpf_fd_invalid;
-    if (log_buffer) {
-        *log_buffer = nullptr;
-    }
-
-    bpf_object* new_object = bpf_object__open(file_name);
-    if (new_object == nullptr) {
-        return -errno;
-    }
-
-    if (ebpf_object_set_execution_type(new_object, execution_type) != EBPF_SUCCESS) {
-        bpf_object__close(new_object);
-        return -1;
-    }
-
-    bpf_program* program = bpf_object__next_program(new_object, nullptr);
-    if (prog_type != BPF_PROG_TYPE_UNSPEC) {
-        bpf_program__set_type(program, prog_type);
-    }
-    int error = bpf_object__load(new_object);
-    if (error < 0) {
-        if (log_buffer) {
-            size_t log_buffer_size;
-            *log_buffer = _strdup(bpf_program__log_buf(program, &log_buffer_size));
-        }
-        bpf_object__close(new_object);
-        return error;
-    }
-
-    *program_fd = bpf_program__fd(program);
-    *object = new_object;
-    return 0;
-}
-
 static uint32_t
 _load_and_attach_xdp_program(_In_ const char* file)
 {
-    ebpf_result_t result = EBPF_SUCCESS;
     uint32_t error = ERROR_SUCCESS;
-    struct bpf_object* object = nullptr;
-    fd_t program_fd;
-    const char* log_buffer = nullptr;
+    bpf_object* object = nullptr;
     bpf_link* link = nullptr;
+    bpf_program* entry_program = nullptr;
     bool program_attached = false;
     bool program_pinned = false;
     bool tail_call_map_populated = false;
-    fd_t entry_program_fd;
-    bpf_program* entry_program = nullptr;
 
     // Load the program.
     printf("Verifying the program ... \n");
-    int load_result =
-        ebpf_program_load(file, BPF_PROG_TYPE_XDP, EBPF_EXECUTION_ANY, &object, &program_fd, &log_buffer);
-    if (load_result != 0) {
-        error = load_result;
-        printf("\nebpf_program_load failed with error %d\n", result);
+    
+    object = bpf_object__open(file);
+    if (!object) {
+        error = errno;
+        printf("bpf_object__open failed with error %d\n", error);
         goto Exit;
     }
 
-    // Get prog fd for the "main" program.
+    if (bpf_object__load(object) < 0) {
+        error = errno;
+        printf("bpf_object__load failed with error %d\n", error);
+        goto Exit;
+    }
+
+    // Get prog object for the "main" program.
     entry_program = bpf_object__find_program_by_name(object, XDP_ENTRY_PROGRAM);
     if (entry_program == nullptr) {
         printf("Failed to find entry program: %s\n", XDP_ENTRY_PROGRAM);
-        error = ERROR_NOT_FOUND;
+        error = errno;
         goto Exit;
     }
-
+    
     // Pin the program so that it is not unloaded when the daemon stops.
-    entry_program_fd = bpf_program__fd(entry_program);
-    error = bpf_obj_pin(entry_program_fd, XDP_PROGRAM_PIN_PATH);
-    if (error != ERROR_SUCCESS) {
-        error = result;
+    if (bpf_program__pin(entry_program, XDP_PROGRAM_PIN_PATH) < 0) {
+        printf("Failed to pin entry program: %s\n", XDP_ENTRY_PROGRAM);
+        error = errno;
         goto Exit;
     }
+    
     program_pinned = true;
 
     // Populate tail call map.
@@ -510,9 +468,9 @@ _load_and_attach_xdp_program(_In_ const char* file)
     tail_call_map_populated = true;
 
     printf("Loading and attaching the program to XDP hook ...\n");
-    result = ebpf_program_attach(entry_program, &EBPF_ATTACH_TYPE_XDP, nullptr, 0, &link);
-    if (result != EBPF_SUCCESS) {
-        error = result;
+    link = bpf_program__attach(entry_program);
+    if (!link) {
+        error = errno;
         goto Exit;
     }
     program_attached = true;

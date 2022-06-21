@@ -143,15 +143,24 @@ main(int argc, char** argv)
     std::cerr << "Press Ctrl-C to shutdown" << std::endl;
 
     // Load conn_track.sys BPF program.
-    struct bpf_object* object;
-    int program_fd;
-    if (bpf_prog_load("conn_track.sys", BPF_PROG_TYPE_SOCK_OPS, &object, &program_fd) < 0) {
-        std::cerr << "BPF program conn_track.sys failed to load: " << errno << std::endl;
+    struct bpf_object* object = bpf_object__open("conn_track.sys");
+    if (!object) {
+        std::cerr << "bpf_object__open for conn_track.sys failed: " << errno << std::endl;
+        return 1;
+    }
+
+    if (bpf_object__load(object) < 0) {
+        std::cerr << "bpf_object__load for conn_track.sys failed: " << errno << std::endl;
         return 1;
     }
 
     // Attach program to sock_ops attach point.
     auto program = bpf_object__find_program_by_name(object, "connection_tracker");
+    if (!program) {
+        std::cerr << "bpf_object__find_program_by_name for \"connection_tracker\" failed: " << errno << std::endl;
+        return 1;
+    }
+
     auto link = bpf_program__attach(program);
     if (!link) {
         std::cerr << "BPF program conn_track.sys failed to attach: " << errno << std::endl;
