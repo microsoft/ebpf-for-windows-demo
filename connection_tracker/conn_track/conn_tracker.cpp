@@ -10,6 +10,7 @@
 #include <io.h>
 #include <iostream>
 #include <ip2string.h>
+#include <Iphlpapi.h>
 #include <in6addr.h>
 #include <mstcpip.h>
 #include <string>
@@ -20,6 +21,7 @@
 #include "conn_tracker.h"
 
 #pragma comment(lib, "ebpfapi.lib")
+#pragma comment(lib, "Iphlpapi.lib")
 #pragma comment(lib, "ntdll.lib")
 #pragma comment(lib, "ws2_32.lib")
 
@@ -32,6 +34,19 @@ typedef struct _connection_history
 } connection_history_t;
 
 std::unordered_map<uint32_t, std::string> _protocol = {{6, "TCP"}, {17, "UDP"}};
+
+std::string interface_luid_to_name(uint64_t luid)
+{
+    std::string name(IF_MAX_STRING_SIZE + 1, ' ');
+    NET_LUID net_luid;
+    net_luid.Value = luid;
+    if (ConvertInterfaceLuidToNameA(&net_luid, name.data(), name.size()) != 0) {
+        name = "unknown";
+    }
+    name = name.substr(0, name.find_first_not_of(' '));
+    return name;
+}
+
 
 std::string
 trim(const std::string& str)
@@ -66,8 +81,9 @@ ip_address_to_string(bool ipv4, const ip_address_t& ip_address, const uint64_t i
         memcpy(addr.u.Byte, ip_address.ipv6, sizeof(ip_address.ipv6));
         auto end = RtlIpv6AddressToStringA(&addr, buffer.data());
         buffer.resize(end - buffer.data());
-        buffer += "%" + std::to_string(interface_luid);
+        
     }
+    buffer += "%" + interface_luid_to_name(interface_luid);
 
     return "[" + trim(buffer) + "]";
 }

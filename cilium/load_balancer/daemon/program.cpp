@@ -4,6 +4,8 @@
 // This file contains code to compile the ebpf program based on the input params.
 
 #include "daemon.h"
+#include <bpf/bpf.h>
+#include <bpf/libbpf.h>
 #include <map>
 #include <locale>
 #include <codecvt>
@@ -414,6 +416,50 @@ Exit:
     return result;
 }
 
+static int
+ebpf_program_load(
+    _In_z_ const char* file_name,
+    bpf_prog_type prog_type,
+    ebpf_execution_type_t execution_type,
+    _Outptr_result_maybenull_ struct bpf_object** object,
+    _Out_ fd_t* program_fd,
+    _Outptr_opt_result_maybenull_z_ const char** log_buffer)
+{
+    *object = nullptr;
+    *program_fd = ebpf_fd_invalid;
+    if (log_buffer) {
+        *log_buffer = nullptr;
+    }
+
+    bpf_object* new_object = bpf_object__open(file_name);
+    if (new_object == nullptr) {
+        return -errno;
+    }
+
+    if (ebpf_object_set_execution_type(new_object, execution_type) != EBPF_SUCCESS) {
+        bpf_object__close(new_object);
+        return -1;
+    }
+
+    bpf_program* program = bpf_object__next_program(new_object, nullptr);
+    if (prog_type != BPF_PROG_TYPE_UNSPEC) {
+        bpf_program__set_type(program, prog_type);
+    }
+    int error = bpf_object__load(new_object);
+    if (error < 0) {
+        if (log_buffer) {
+            size_t log_buffer_size;
+            *log_buffer = _strdup(bpf_program__log_buf(program, &log_buffer_size));
+        }
+        bpf_object__close(new_object);
+        return error;
+    }
+
+    *program_fd = bpf_program__fd(program);
+    *object = new_object;
+    return 0;
+}
+
 static uint32_t
 _load_and_attach_xdp_program(_In_ const char* file)
 {
@@ -431,10 +477,10 @@ _load_and_attach_xdp_program(_In_ const char* file)
 
     // Load the program.
     printf("Verifying the program ... \n");
-    result =
-        ebpf_program_load(file, &EBPF_PROGRAM_TYPE_XDP, nullptr, EBPF_EXECUTION_ANY, &object, &program_fd, &log_buffer);
-    if (result != EBPF_SUCCESS) {
-        error = result;
+    int load_result =
+        ebpf_program_load(file, BPF_PROG_TYPE_XDP, EBPF_EXECUTION_ANY, &object, &program_fd, &log_buffer);
+    if (load_result != 0) {
+        error = load_result;
         printf("\nebpf_program_load failed with error %d\n", result);
         goto Exit;
     }
