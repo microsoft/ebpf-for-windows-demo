@@ -7,6 +7,7 @@ Use the [Getting Started](docs/GettingStarted.md) guide for first time setup of 
 Following links contain more details and the setup steps for the different demo projects.
 
 - [Cilium L4 Load Balancer using eBPF for Windows](cilium/load_balancer/docs/CiliumL4LBSetup.md)
+- [Connection Tracking with Native eBPF program using eBPF for Windows](connection_tracker/README.md)
 
 ## Contributing
 
