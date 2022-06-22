@@ -6,7 +6,6 @@
 extern "C"
 {
 #include "ebpf_api.h"
-#define __doxygen
 #include "linux/bpf.h"
 #include "bpf/bpf.h"
 #include "bpf/libbpf.h"

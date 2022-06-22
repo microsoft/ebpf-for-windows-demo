@@ -37,7 +37,7 @@ void verify_program(_In_ const char* file, uint32_t expected_section_count)
 
         REQUIRE(
             (result = ebpf_api_elf_verify_section_from_file(
-                file, section_name, false, &report, &error_message, &stats),
+                file, section_name, &EBPF_PROGRAM_TYPE_XDP, false, &report, &error_message, &stats),
                 ebpf_free_string(error_message),
                 error_message = nullptr,
                 result == 0));

@@ -4,6 +4,8 @@
 // This file contains code to compile the ebpf program based on the input params.
 
 #include "daemon.h"
+#include <bpf/bpf.h>
+#include <bpf/libbpf.h>
 #include <map>
 #include <locale>
 #include <codecvt>
@@ -417,43 +419,52 @@ Exit:
 static uint32_t
 _load_and_attach_xdp_program(_In_ const char* file)
 {
-    ebpf_result_t result = EBPF_SUCCESS;
     uint32_t error = ERROR_SUCCESS;
-    struct bpf_object* object = nullptr;
-    fd_t program_fd;
-    const char* log_buffer = nullptr;
+    bpf_object* object = nullptr;
     bpf_link* link = nullptr;
+    bpf_program* entry_program = nullptr;
     bool program_attached = false;
     bool program_pinned = false;
     bool tail_call_map_populated = false;
-    fd_t entry_program_fd;
-    bpf_program* entry_program = nullptr;
 
     // Load the program.
     printf("Verifying the program ... \n");
-    result =
-        ebpf_program_load(file, &EBPF_PROGRAM_TYPE_XDP, nullptr, EBPF_EXECUTION_ANY, &object, &program_fd, &log_buffer);
-    if (result != EBPF_SUCCESS) {
-        error = result;
-        printf("\nebpf_program_load failed with error %d\n", result);
+    
+    object = bpf_object__open(file);
+    if (!object) {
+        error = errno;
+        printf("bpf_object__open failed with error %d\n", error);
         goto Exit;
     }
 
-    // Get prog fd for the "main" program.
+    // Get prog object for the "main" program.
     entry_program = bpf_object__find_program_by_name(object, XDP_ENTRY_PROGRAM);
     if (entry_program == nullptr) {
         printf("Failed to find entry program: %s\n", XDP_ENTRY_PROGRAM);
-        error = ERROR_NOT_FOUND;
+        error = errno;
         goto Exit;
     }
 
-    // Pin the program so that it is not unloaded when the daemon stops.
-    entry_program_fd = bpf_program__fd(entry_program);
-    error = bpf_obj_pin(entry_program_fd, XDP_PROGRAM_PIN_PATH);
-    if (error != ERROR_SUCCESS) {
-        error = result;
+    if (bpf_program__set_type(entry_program, BPF_PROG_TYPE_XDP) < 0) {
+        printf("Failed to set program type for entry program: %s\n", XDP_ENTRY_PROGRAM);
+        error = errno;
         goto Exit;
     }
+
+    printf("Loading and attaching the program to XDP hook ...\n");
+    if (bpf_object__load(object) < 0) {
+        error = errno;
+        printf("bpf_object__load failed with error %d\n", error);
+        goto Exit;
+    }
+    
+    // Pin the program so that it is not unloaded when the daemon stops.
+    if (bpf_program__pin(entry_program, XDP_PROGRAM_PIN_PATH) < 0) {
+        printf("Failed to pin entry program: %s\n", XDP_ENTRY_PROGRAM);
+        error = errno;
+        goto Exit;
+    }
+    
     program_pinned = true;
 
     // Populate tail call map.
@@ -463,10 +474,9 @@ _load_and_attach_xdp_program(_In_ const char* file)
     }
     tail_call_map_populated = true;
 
-    printf("Loading and attaching the program to XDP hook ...\n");
-    result = ebpf_program_attach(entry_program, &EBPF_ATTACH_TYPE_XDP, nullptr, 0, &link);
-    if (result != EBPF_SUCCESS) {
-        error = result;
+    link = bpf_program__attach(entry_program);
+    if (!link) {
+        error = errno;
         goto Exit;
     }
     program_attached = true;
