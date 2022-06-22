@@ -451,6 +451,7 @@ _load_and_attach_xdp_program(_In_ const char* file)
         goto Exit;
     }
 
+    printf("Loading and attaching the program to XDP hook ...\n");
     if (bpf_object__load(object) < 0) {
         error = errno;
         printf("bpf_object__load failed with error %d\n", error);
@@ -473,7 +474,6 @@ _load_and_attach_xdp_program(_In_ const char* file)
     }
     tail_call_map_populated = true;
 
-    printf("Loading and attaching the program to XDP hook ...\n");
     link = bpf_program__attach(entry_program);
     if (!link) {
         error = errno;
