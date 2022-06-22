@@ -25,14 +25,6 @@
 #pragma comment(lib, "ntdll.lib")
 #pragma comment(lib, "ws2_32.lib")
 
-typedef struct _connection_history
-{
-    connection_tuple_t tuple;
-    bool ipv4;
-    uint64_t start_time;
-    uint64_t end_time;
-} connection_history_t;
-
 std::unordered_map<uint32_t, std::string> _protocol = {{6, "TCP"}, {17, "UDP"}};
 
 std::string interface_luid_to_name(uint64_t luid)
@@ -101,9 +93,9 @@ conn_track_history_callback(void* ctx, void* data, size_t size)
 
     if (size == sizeof(connection_history_t)) {
         auto history = reinterpret_cast<connection_history_t*>(data);
-        auto source = ip_address_to_string(history->ipv4, history->tuple.src_ip, history->tuple.interface_luid) + ":" +
+        auto source = ip_address_to_string(history->is_ipv4, history->tuple.src_ip, history->tuple.interface_luid) + ":" +
                       std::to_string(htons(history->tuple.src_port));
-        auto dest = ip_address_to_string(history->ipv4, history->tuple.dst_ip, history->tuple.interface_luid) + ":" +
+        auto dest = ip_address_to_string(history->is_ipv4, history->tuple.dst_ip, history->tuple.interface_luid) + ":" +
                     std::to_string(htons(history->tuple.dst_port));
         double duration = static_cast<double>(history->end_time);
         duration -= static_cast<double>(history->start_time);

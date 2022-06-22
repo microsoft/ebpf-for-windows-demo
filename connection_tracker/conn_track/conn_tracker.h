@@ -23,3 +23,11 @@ typedef struct _connection_tuple
     uint32_t compartment_id;
     uint64_t interface_luid;
 } connection_tuple_t;
+
+typedef struct _connection_history
+{
+    connection_tuple_t tuple;
+    bool is_ipv4;
+    uint64_t start_time;
+    uint64_t end_time;
+} connection_history_t;
