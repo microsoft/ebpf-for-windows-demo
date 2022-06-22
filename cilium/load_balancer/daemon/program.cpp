@@ -437,17 +437,23 @@ _load_and_attach_xdp_program(_In_ const char* file)
         goto Exit;
     }
 
-    if (bpf_object__load(object) < 0) {
-        error = errno;
-        printf("bpf_object__load failed with error %d\n", error);
-        goto Exit;
-    }
-
     // Get prog object for the "main" program.
     entry_program = bpf_object__find_program_by_name(object, XDP_ENTRY_PROGRAM);
     if (entry_program == nullptr) {
         printf("Failed to find entry program: %s\n", XDP_ENTRY_PROGRAM);
         error = errno;
+        goto Exit;
+    }
+
+    if (bpf_program__set_type(entry_program, BPF_PROG_TYPE_XDP) < 0) {
+        printf("Failed to set program type for entry program: %s\n", XDP_ENTRY_PROGRAM);
+        error = errno;
+        goto Exit;
+    }
+
+    if (bpf_object__load(object) < 0) {
+        error = errno;
+        printf("bpf_object__load failed with error %d\n", error);
         goto Exit;
     }
     
