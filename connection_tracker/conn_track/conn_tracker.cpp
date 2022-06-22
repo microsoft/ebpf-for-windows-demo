@@ -35,7 +35,7 @@ std::string interface_luid_to_name(uint64_t luid)
     if (ConvertInterfaceLuidToNameA(&net_luid, name.data(), name.size()) != 0) {
         name = "unknown";
     }
-    name = name.substr(0, name.find_first_not_of(' '));
+    name = name.substr(0, name.find_first_of(' '));
     return name;
 }
 
