@@ -361,7 +361,7 @@ get_map_fd(const char* map_name)
     printf("get_map_fd: pinned map not found, creating new map %s\n", map_name);
 
     // Map not created yet. Create and pin the map.
-    fd = bpf_create_map(it->second.map_type, it->second.key_size, it->second.value_size, it->second.max_entries, 0);
+    fd = bpf_map_create(it->second.map_type, nullptr, it->second.key_size, it->second.value_size, it->second.max_entries, 0);
     if (fd > 0) {
         // Map created. Now pin the map.
         int error = bpf_obj_pin(fd, pin_path.c_str());
@@ -447,7 +447,7 @@ update_maglev_table_to_map(bool ipv6, uint16_t rev_nat_id, std::vector<uint32_t>
 
     // Create inner maglev map
     fd_t inner_map_fd =
-        bpf_create_map(BPF_MAP_TYPE_ARRAY, sizeof(uint32_t), sizeof(uint32_t) * MAGLEV_TABLE_SIZE, 1, 0);
+        bpf_map_create(BPF_MAP_TYPE_ARRAY, nullptr, sizeof(uint32_t), sizeof(uint32_t) * MAGLEV_TABLE_SIZE, 1, 0);
     if (inner_map_fd == ebpf_fd_invalid) {
         return ERROR_NOT_FOUND;
     }

@@ -394,7 +394,7 @@ _populate_tail_call_map(_In_ const struct bpf_object* object)
 
     // Iterate over all the programs and check the program names.
     struct bpf_program* program = nullptr;
-    program = bpf_program__next(program, object);
+    program = bpf_object__next_program(object, program);
     while (program != nullptr) {
         const char* name = bpf_program__name(program);
         index = _get_map_index_from_program_name(name);
@@ -406,7 +406,7 @@ _populate_tail_call_map(_In_ const struct bpf_object* object)
                 goto Exit;
             }
         }
-        program = bpf_program__next(program, object);
+        program = bpf_object__next_program(object, program);
     }
 
 Exit:

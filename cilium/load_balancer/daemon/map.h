@@ -3,9 +3,12 @@
 
 #pragma once
 
+// Can't be within an extern "C" block.
+// Must be included prior to other BPF headers.
+#include "ebpf_api.h"
+
 extern "C"
 {
-#include "ebpf_api.h"
 #include "linux/bpf.h"
 #include "bpf/bpf.h"
 #include "bpf/libbpf.h"
