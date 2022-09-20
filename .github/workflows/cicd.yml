@@ -77,6 +77,13 @@ jobs:
       run: |
         nuget restore ${{env.DEMO_SOLUTION_FILE}}
 
+    - name: Configure eBPF store
+      id: configure_ebpf_store
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        packages\eBPF-for-Windows.0.4.0\build\native\bin\export_program_info.exe --clear
+        packages\eBPF-for-Windows.0.4.0\build\native\bin\export_program_info.exe
+
     - name: Create catch2 project for ebpf-for-windows-demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
