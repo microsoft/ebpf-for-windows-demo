@@ -27,8 +27,3 @@ updates:
       interval: "weekly"
       day: "saturday"
 
-  - package-ecosystem: "docker"
-    directory: "/images"
-    schedule:
-      interval: "weekly"
-      day: "saturday"
