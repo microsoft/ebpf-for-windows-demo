@@ -12,6 +12,8 @@
 typedef unsigned char __u8;
 #endif
 
+typedef __u64 uintptr_t;
+
 typedef __u16 __sum16;
 typedef __u16 __le16;
 typedef __u32 __le32;
