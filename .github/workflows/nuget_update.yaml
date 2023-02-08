@@ -37,11 +37,18 @@ jobs:
         # Only check out main repo, not submodules.
         ref: ${{ github.event.workflow_run.head_branch }}
 
+    # Restore nuget packages used by the solution.
+    - name: Restore NuGet packages for ebpf-for-windows-demo
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        nuget restore ${{env.DEMO_SOLUTION_FILE}}
+
     # Update nuget packages used by the solution.
     - name: Update NuGet packages
       run: |
         nuget update -noninteractive -verbosity detailed ${{env.SOLUTION_FILE_PATH}}
 
+    # Create a pull request with the changes.
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@2b011faafdcbc9ceb11414d64d0573f37c774b04
       with:
