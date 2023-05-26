@@ -484,7 +484,7 @@ _load_and_attach_xdp_program(_In_ const char* file)
 Exit:
     if (error != ERROR_SUCCESS) {
         if (program_pinned) {
-            ebpf_object_unpin(XDP_PROGRAM_PIN_PATH);
+            (void)ebpf_object_unpin(XDP_PROGRAM_PIN_PATH);
         }
         if (program_attached) {
             bpf_link__destroy(link);
