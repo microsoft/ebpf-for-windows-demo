@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
 -->
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\eBPF-for-Windows.0.5.0\build\native\ebpf-for-windows.props" Condition="Exists('..\..\packages\eBPF-for-Windows.0.5.0\build\native\ebpf-for-windows.props')" />
+  <Import Project="..\..\packages\eBPF-for-Windows.0.9.0\build\native\ebpf-for-windows.props" Condition="Exists('..\..\packages\eBPF-for-Windows.0.9.0\build\native\ebpf-for-windows.props')" />
   <Import Project="..\..\packages\CatchOrg.Catch.2.8.0\build\native\CatchOrg.Catch.props" Condition="Exists('..\..\packages\CatchOrg.Catch.2.8.0\build\native\CatchOrg.Catch.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -165,13 +165,13 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\..\packages\boost.1.81.0\build\boost.targets" Condition="Exists('..\..\packages\boost.1.81.0\build\boost.targets')" />
+    <Import Project="..\..\packages\boost.1.82.0\build\boost.targets" Condition="Exists('..\..\packages\boost.1.82.0\build\boost.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\boost.1.81.0\build\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost.1.81.0\build\boost.targets'))" />
-    <Error Condition="!Exists('..\..\packages\eBPF-for-Windows.0.5.0\build\native\ebpf-for-windows.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\eBPF-for-Windows.0.5.0\build\native\ebpf-for-windows.props'))" />
+    <Error Condition="!Exists('..\..\packages\boost.1.82.0\build\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost.1.82.0\build\boost.targets'))" />
+    <Error Condition="!Exists('..\..\packages\eBPF-for-Windows.0.9.0\build\native\ebpf-for-windows.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\eBPF-for-Windows.0.9.0\build\native\ebpf-for-windows.props'))" />
   </Target>
 </Project>
