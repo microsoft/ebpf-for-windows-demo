@@ -757,7 +757,7 @@ clean_old_pinned_maps()
     uint32_t array_size = sizeof(_pinned_maps) / sizeof(_pinned_maps[0]);
     for (uint32_t i = 0; i < array_size; i++) {
         std::string pin_path = get_map_pin_path(_pinned_maps[i].c_str());
-        ebpf_object_unpin(pin_path.c_str());
+        (void)ebpf_object_unpin(pin_path.c_str());
     }
 
     // Now close the map fds that are open.
