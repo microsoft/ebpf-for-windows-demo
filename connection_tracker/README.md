@@ -18,7 +18,7 @@ Note: These steps are already performed as part of the build process for the pro
 3) Change directory to connection_tracker\bpf: ```cd connection_tracker\bpf```.
 4) Create a directory to hold build output: ```md out```.
 5) Build the eBPF program to an ELF file: ```clang -g -target bpf -O2 -Werror -I%EBPF_ROOT%\include -c conn_track.c -o out\conn_track.o```.
-6) Invoke the powershell script to build the native image: ```cd out && powershell -NonInteractive -ExecutionPolicy Unrestricted %EBPF_ROOT%\bin\Convert-BpfToNative.ps1 -ProgramName conn_track.o```.
+6) Invoke the powershell script to build the native image: ```cd out && powershell -NonInteractive -ExecutionPolicy Unrestricted %EBPF_ROOT%\bin\Convert-BpfToNative.ps1 -FileName conn_track.o```.
 7) This produces the native eBPF program conn_track.sys.
 8) Netsh tools can be used to examine the native eBPF program: ```netsh ebpf show sections conn_track.sys```.
 
