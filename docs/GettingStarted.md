@@ -47,7 +47,8 @@ The following steps need to be executed _once_ before the first build on a new c
 2. ```cmake -G "Visual Studio 17 2022" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF```
 3. ```nuget restore ebpf-for-windows-demo.sln```
 
-Note: eBPF-for-Windows Demo project has eBPF-for-Windows project as nuget package published from latest stable release. The nuget package is placed in folder 'ebpf-for-windows-demo\packages\eBPF-for-Windows.<release>'
+Note: The eBPF-for-Windows Demo project has eBPF-for-Windows as a nuget package published from the latest stable release. The nuget package is placed in 'ebpf-for-windows-demo\packages\eBPF-for-Windows.<release>'
+
 
 ### Building using Developer Command Prompt for VS 2022
 1. Launch `Developer Command Prompt for VS 2022`.
