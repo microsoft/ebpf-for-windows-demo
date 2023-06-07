@@ -40,13 +40,14 @@ This section outlines the steps to build, prepare and build the eBPF-for-Windows
 ### Cloning the project
 1. ```git clone --recurse-submodules https://github.com/microsoft/ebpf-for-windows-demo.git```.
 By default this will clone the project under the `ebpf-for-windows-demo` directory.
-eBPF-for-Windows Demo project includes the eBPF-for-Windows project as a submodule.
 
 ### Prepare for first build
 The following steps need to be executed _once_ before the first build on a new clone.
 1. Launch `Developer Command Prompt for VS 2022` by running `"C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\VsDevCmd.bat"`.
 2. ```cmake -G "Visual Studio 17 2022" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF```
 3. ```nuget restore ebpf-for-windows-demo.sln```
+
+Note: eBPF-for-Windows Demo project has eBPF-for-Windows project as nuget package published from latest stable release. The nuget package is placed in folder 'ebpf-for-windows-demo\packages\eBPF-for-Windows.<release>'
 
 ### Building using Developer Command Prompt for VS 2022
 1. Launch `Developer Command Prompt for VS 2022`.
