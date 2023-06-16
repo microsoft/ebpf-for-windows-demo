@@ -102,7 +102,7 @@ typedef struct interface_info
     SOCKADDR_IN6 ipv6_address = {0};
     uint32_t mtu;
     uint32_t ifIndex = 0;
-    uint8_t mac_address[MAX_ADAPTER_ADDRESS_LENGTH];
+    uint8_t mac_address[MAX_ADAPTER_ADDRESS_LENGTH] = {0};
 } interface_info_t;
 
 typedef enum lb_mode
