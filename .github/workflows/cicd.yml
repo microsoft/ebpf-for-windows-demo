@@ -72,6 +72,11 @@ jobs:
         path: packages
         key: ${{ runner.os }}-${{env.BUILD_PLATFORM}}-${{env.BUILD_CONFIGURATION}}-${{env.BUILD_ARTIFACT_NAME}}-${{ hashFiles('**/packages.config') }}
 
+    - name: Create catch2 project for ebpf-for-windows-demo
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        cmake -G "Visual Studio 17 2022" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF
+
     - name: Restore NuGet packages for ebpf-for-windows-demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
@@ -83,11 +88,6 @@ jobs:
       run: |
         packages\eBPF-for-Windows.0.9.0\build\native\bin\export_program_info.exe --clear
         packages\eBPF-for-Windows.0.9.0\build\native\bin\export_program_info.exe
-
-    - name: Create catch2 project for ebpf-for-windows-demo
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: |
-        cmake -G "Visual Studio 17 2022" -S external\catch2 -B external\catch2\build -DBUILD_TESTING=OFF
 
     - name: Build eBPF-for-Windows-Demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
