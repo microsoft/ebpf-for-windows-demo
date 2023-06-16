@@ -138,6 +138,7 @@
 xcopy $(EbpfIncludePath)\* $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\windows_types.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\stdint.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
+xcopy $(SolutionDir)cilium\load_balancer\stdbool.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\guiddef.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\bpf\node_config_static.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
 xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_snat.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
@@ -182,6 +183,7 @@ xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$
 xcopy $(EbpfIncludePath)\* $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\windows_types.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\stdint.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
+xcopy $(SolutionDir)cilium\load_balancer\stdbool.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\guiddef.h $(SolutionDir)$(Platform)\$(Configuration)\include\* /E/Y
 xcopy $(SolutionDir)cilium\load_balancer\bpf\node_config_static.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
 xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_snat.h $(SolutionDir)$(Platform)\$(Configuration)\bpf\ /Y
