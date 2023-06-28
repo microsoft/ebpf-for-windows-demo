@@ -79,7 +79,8 @@ The following steps describe how to setup the LB node VM:
 5.  Copy all the files from the build directory (`ebpf-for-windows-demo`) mentioned in the previous section to ``C:\ebpf``
 6. Install ``ebpf-for-windows.<version>`` on the LB node using Windows Installer Package from [here](https://github.com/microsoft/ebpf-for-windows/releases). Download ``ebpf-for-windows.<version>.msi``. Also download and install ``Microsoft Visual C++ Redistributable (x64)`` exe. ebpf-for-windows will be installed in ``C:\Program Files\ebpf-for-windows``
 
-#### Setup Windows Backend Node(s)
+#### Set Up Windows Backend Node(s)
+
 
 This section describes how to configure the Windows backend nodes. For DSR mode, backend nodes will receive an IP-in-IP packet, and we need some eBPF program to decap those packets. On Windows backend nodes, the demo will use an XDP sample program ebpf-for-windows/decap_permit_packet.c at master · microsoft/ebpf-for-windows (github.com) to decap IP-in-IP packets. The sample is present in eBPF-for-Windows project. Following are the steps to setup the Windows backend nodes:
 
