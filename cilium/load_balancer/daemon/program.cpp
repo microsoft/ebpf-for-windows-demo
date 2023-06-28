@@ -451,7 +451,7 @@ _load_and_attach_xdp_program(_In_ const char* file)
     program = bpf_object__next_program(object, program);
     while (program != nullptr) {
         errno = 0;
-        auto prog_name = bpf_program__name(program);
+        const char* prog_name = bpf_program__name(program);
         if (bpf_program__set_type(program, BPF_PROG_TYPE_XDP) < 0) {
             error = errno;
             printf("Failed to set program type for program: %s, error=%d\n", prog_name, error);
