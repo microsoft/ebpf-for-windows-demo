@@ -89,7 +89,8 @@ This section describes how to configure the Windows backend nodes. For DSR mode,
 4. Load the XDP decap program using command ``netsh ebpf add program decap_permit_packet.o pinpath=ipip_decap``
 5. Add VIP ``40.1.1.1`` to loopback interface.
 6. Enable ``weakhost send`` and ``weakhost receive`` on both loopback and the external interface using the following command: ``Set-NetIPInterface -ifIndex <ifindex> -WeakHostSend Enabled -WeakHostReceive Enabled``
-7. Once ebpf is installed on Windows backend node, install [IIS](https://learn.microsoft.com/en-us/iis/manage/creating-websites/scenario-build-a-static-website-on-iis) on the Windows backend from the server manager and configure a website. 
+7. Once eBPF is installed on the Windows backend node, install [IIS](https://learn.microsoft.com/en-us/iis/manage/creating-websites/scenario-build-a-static-website-on-iis) on the Windows backend from the server manager and configure a website. 
+
 8. A sample html page is present in this repository [here](../html/index.html). This sample can be modified and used for each backend node in this demo.
 
 #### Setup Linux Backend Node(s)
