@@ -560,7 +560,6 @@ _clean_tail_call_map_state()
     fd_t map_fd = bpf_obj_get(pin_path.c_str());
     if (map_fd == ebpf_fd_invalid) {
         // Map not found. Nothing to do.
-        printf("Cleanup: Invalid pinned tail call map fd for %s\n,", pin_path.c_str());
         error = ERROR_NOT_FOUND;
         goto Exit;
     }
