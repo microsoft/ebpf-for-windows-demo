@@ -37,17 +37,17 @@ Apart from the above operations, the demo agent also provides some extra command
 
 The following sections provide all the steps to prepare a setup to run Cilium L4LB using eBPF-for-Windows. This demo uses a web server (running on all backend nodes) to demonstrate load balancing and a client will connect to the website using the VIP.
 
-### Build eBPF-for-Windows and eBPF-for-Windows-Demo
+### Build eBPF-for-Windows-Demo
 
 eBPF-for-Windows-Demo contains the demo agent code for Cilium load balance demo in `cilium\load_balancer\daemon`. The modified Cilium XDP code is present in a [fork](https://github.com/saxena-anurag/cilium/tree/anurag/cilium_xdp_bpf_code_changes) of the [Cilium repository](https://github.com/cilium/cilium). This project references the Cilium fork as a submodule.
-This projects also includes `eBPF-for-Windows` project as a submodule.
+This projects also includes `eBPF-for-Windows` project as a nuget package.
 
 To clone and build this project, follow the steps mentioned in the [Getting Started](../../../docs/GettingStarted.md) guide.
 
-The above guide provides steps to build both the `eBPF-for-Windows` submodule and the `eBPF-for-Windows-Demo` project.
+The above guide provides steps to build the `eBPF-for-Windows-Demo` project.
 
-Once both the projects have been built, following will be location of the build outputs:
-1. `eBPF-for-Windows`: files will be present in `external\ebpf-for-windows\x64\Release`
+Once the project have been built, following will be location of the build outputs:
+1. `eBPF-for-Windows`: Nuget package will be present in `packages\eBPF-for-Windows.<version>
 2. `eBPF-for-Windows-Demo`: files will be present in `x64\Release`
 
 ### Prepare Demo Setup
@@ -67,32 +67,33 @@ To prepare the Windows host and the Windows VMs required for this demo, an evalu
 
 The demo will use ```40.1.1.1``` as the LB VIP.
 
-#### Setup LB node
+#### Set Up LB node
 
 The Cilium XDP code takes the various interface properties as compile time macros, hence the XDP program needs to be compiled on the machine where it has to be loaded and attached. In the case of this demo, the XDP program needs to be compiled on the LB node.
 
 The following steps describe how to setup the LB node VM:
-1. Install [Clang 10.0](https://github.com/llvm/llvm-project/releases/tag/llvmorg-10.0.0). Download ``LLVM-10.0.0-win64.exe``
-2. Ensure Clang is added to system PATH.
+1. Install [Clang 11.0.1](https://github.com/llvm/llvm-project/releases/tag/llvmorg-11.0.1). Download ``LLVM-11.0.1-win64.exe``.
+2. Ensure Clang is added to system PATH. Check ``"clang --version"``.
 3. Enable test signing by running command ``"bcdedit -set testsigning on"``. This command needs to be run as Administrator.
 4. Create a folder ``C:\ebpf`` on the LB node.
-5.  Copy all the files from the 2 build directories (for `ebpf-for-windows` and `ebpf-for-windows-demo`) mentioned in the previous section to ``C:\ebpf``
-5. Go to ``C:\ebpf`` and execute ``"install_ebpf.bat"``. This will install the ebpf-for-Windows framework on the LB node.
+5. Copy all the files from the build directory (`ebpf-for-windows-demo`) mentioned in the previous section to ``C:\ebpf``
+6. Install ``ebpf-for-windows.<version>`` on the LB node using Windows Installer Package from [here](https://github.com/microsoft/ebpf-for-windows/releases). Download ``ebpf-for-windows.<version>.msi``. Also download and install ``Microsoft Visual C++ Redistributable (x64)`` exe. ebpf-for-windows will be installed in ``C:\Program Files\ebpf-for-windows``
 
-#### Setup Windows Backend Node(s)
+#### Set Up Windows Backend Node(s)
 
-This section describes how to configure the Windows backend nodes. For DSR mode, backend nodes will receive an IP-in-IP packet, and we need some eBPF program to decap those packets. On Windows backend nodes, the demo will use an XDP sample program (ebpf-for-windows/decap_permit_packet.c at master · microsoft/ebpf-for-windows (github.com) to decap IP-in-IP packets. The sample is present in eBPF-for-Windows project. Following are the steps to setup the Windows backend nodes:
+This section describes how to configure the Windows backend nodes. For DSR mode, backend nodes will receive an IP-in-IP packet, and we need some eBPF program to decap those packets. On Windows backend nodes, the demo will use an XDP sample program ebpf-for-windows/decap_permit_packet.c at master · microsoft/ebpf-for-windows (github.com) to decap IP-in-IP packets. The sample is present in eBPF-for-Windows project. Following are the steps to setup the Windows backend nodes:
 
 1. Enable test signing on the node by running command ``"bcdedit -set testsigning on"``. This command needs to be run as Administrator.
-2. Create a folder ``C:\ebpf`` and copy the all the files from the `ebpf-for-windows` build directory mentioned above to ``C:\ebpf``
-3. Go to ``C:\ebpf`` and execute ``"install_ebpf.bat"``. This will install the ebpf-for-Windows framework.
-4. Load the XDP decap program using command ``netsh ebpf add program decap_permit_packet.o pinpath=ipip_decap``
-5. Add VIP ``40.1.1.1`` to loopback interface.
-6. Enable ``weakhost send`` and ``weakhost receive`` on both loopback and the external interface using the following command: ``Set-NetIPInterface -ifIndex <ifindex> -WeakHostSend Enabled -WeakHostReceive Enabled``
-7. Once ebpf is installed on Windows backend node, install IIS on the Windows backend from the server manager and configure a website. 
-8. A sample html page is present in this repository [here](../html/index.html). This sample can be modified and used for each backend node in this demo.
+2. Install ``ebpf-for-windows.<version>`` on the node using Windows Installer Package, as stated in Step 6 of ``"Set Up LB node"``. This will install the ebpf-for-windows framework.
+3. Separately build ``ebpf-for-windows`` in the development build machine. Instructions [here](https://github.com/microsoft/ebpf-for-windows/blob/main/docs/GettingStarted.md)
+4. Create a folder ``C:\ebpf`` and copy the file ``decap_permit_packet.o`` from the above `ebpf-for-windows` build directory to ``C:\ebpf``
+5. Load the XDP decap program using command ``netsh ebpf add program decap_permit_packet.o pinpath=ipip_decap``
+6. Add VIP ``40.1.1.1`` to [loopback interface](https://learn.microsoft.com/en-gb/troubleshoot/windows-server/networking/install-microsoft-loopback-adapter).
+7. Enable ``weakhost send`` and ``weakhost receive`` on both loopback and the external interface using the following command: ``Set-NetIPInterface -ifIndex <ifindex> -WeakHostSend Enabled -WeakHostReceive Enabled``
+8. Once eBPF is installed on the Windows backend node, install [IIS](https://learn.microsoft.com/en-us/iis/manage/creating-websites/scenario-build-a-static-website-on-iis) on the Windows backend from the server manager and configure a website. 
+9. A sample html page is present in this repository [here](../html/index.html). This sample can be modified and used for each backend node in this demo.
 
-#### Setup Linux Backend Node(s)
+#### Set Up Linux Backend Node(s)
 
 As with Windows backend node, for DSR mode, the Linux backend node also requires some eBPF program to decap IP-in-IP packets. The demo uses a TC based eBPF program to decap the IP-in-IP packets. The sample eBPF program is available in [Cilium repository here](https://github.com/cilium/cilium/blob/ba4e73d86dc36f5c5cbe5f17cf00b07ba4a983ff/test/l4lb/test_tc_tunnel.c). A compiled object file (compiled on Ubuntu Linux) is also checked-in in this repository [here](../decap/test_tc_tunnel.o).
 
@@ -104,10 +105,14 @@ Following are the steps / commands to setup the Linux backend node:
     1. ``sudo tc qdisc add dev eth0 clsact``
     2. ``tc filter add dev eth0 ingress bpf direct-action object-file ./test_tc_tunnel.o section decap``
 
-#### Setup Host as Client
+#### Set Up Host as Client
 
 Install [Mozilla Firefox](https://www.mozilla.org/en-US/firefox/new/) browser on the host which will act as a client to connect to the load balanced website.
 Add a route on the host vNIC with destination ``40.1.1.1/32`` (VIP) and next hop as ``20.1.1.1`` (LB node IP). This route will ensure all traffic originating on host destined to ``40.1.1.1`` will be forwarded to the LB node.
+
+``"route add 40.1.1.1 mask 255.255.255.255 20.1.1.1"``
+
+``"route print"``
 
 ## Running Cilium L4LB XDP program
 
@@ -115,6 +120,10 @@ Add a route on the host vNIC with destination ``40.1.1.1/32`` (VIP) and next hop
 Once the LB node, backends and the host have been configured, use the following command to launch the cilium-based agent in SNAT mode on the LB node:
 
 ``cilium_based_agent.exe --bpf-lb-mode=snat --device=ethernet``
+
+``netsh ebpf show programs``
+
+``netsh ebpf show maps``
 
 ![Start Agent](daemon_start.png)
 
