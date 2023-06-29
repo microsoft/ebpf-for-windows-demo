@@ -100,9 +100,9 @@ typedef struct interface_info
     std::wstring name;
     SOCKADDR_IN ipv4_address = {0};
     SOCKADDR_IN6 ipv6_address = {0};
-    uint32_t mtu;
+    uint32_t mtu = 0;
     uint32_t ifIndex = 0;
-    uint8_t mac_address[MAX_ADAPTER_ADDRESS_LENGTH];
+    uint8_t mac_address[MAX_ADAPTER_ADDRESS_LENGTH]{};
 } interface_info_t;
 
 typedef enum lb_mode
@@ -114,7 +114,7 @@ typedef enum lb_mode
 
 typedef struct global_config
 {
-    interface_info_t info;
+    interface_info_t info{};
     lb_mode_t mode{};
     bool v4_enabled{};
     bool v6_enabled{};
