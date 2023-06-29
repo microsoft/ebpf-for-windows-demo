@@ -106,6 +106,7 @@ program_name_to_map_index_t cilium_tail_call_maps[] = {
 };
 
 std::map<std::string, std::string> _compile_time_defines;
+static uint32_t _clean_tail_call_map_state();
 
 string
 format_mac_address(const uint8_t* mac_address)
@@ -426,6 +427,7 @@ _load_and_attach_xdp_program(_In_ const char* file)
     bool program_attached = false;
     bool program_pinned = false;
     bool tail_call_map_populated = false;
+    bpf_program* program = nullptr;
 
     // Load the program.
     printf("Verifying the program ... \n");
@@ -433,43 +435,55 @@ _load_and_attach_xdp_program(_In_ const char* file)
     object = bpf_object__open(file);
     if (!object) {
         error = errno;
-        printf("bpf_object__open failed with error %d\n", error);
+        printf("bpf_object__open failed for file: %s, error=%d\n", file, error);
         goto Exit;
     }
 
-    // Get prog object for the "main" program.
+    // Get program object for the "main" program.
     entry_program = bpf_object__find_program_by_name(object, XDP_ENTRY_PROGRAM);
     if (entry_program == nullptr) {
-        printf("Failed to find entry program: %s\n", XDP_ENTRY_PROGRAM);
         error = errno;
+        printf("Failed to find entry program: %s, error=%d\n", XDP_ENTRY_PROGRAM, error);
         goto Exit;
     }
 
-    if (bpf_program__set_type(entry_program, BPF_PROG_TYPE_XDP) < 0) {
-        printf("Failed to set program type for entry program: %s\n", XDP_ENTRY_PROGRAM);
-        error = errno;
-        goto Exit;
+    // Iterate over all the programs and set the program type and attach type.
+    program = bpf_object__next_program(object, program);
+    while (program != nullptr) {
+        errno = 0;
+        const char* prog_name = bpf_program__name(program);
+        if (bpf_program__set_type(program, BPF_PROG_TYPE_XDP) < 0) {
+            error = errno;
+            printf("Failed to set program type for program: %s, error=%d\n", prog_name, error);
+            goto Exit;
+        }
+        if (bpf_program__set_expected_attach_type(program, BPF_XDP) < 0) {
+            error = errno;
+            printf("Failed to set expected attach type for program: %s, error=%d\n", prog_name, error);
+            goto Exit;
+        }
+        program = bpf_object__next_program(object, program);
     }
 
     printf("Loading and attaching the program to XDP hook ...\n");
     if (bpf_object__load(object) < 0) {
         error = errno;
-        printf("bpf_object__load failed with error %d\n", error);
+        printf("bpf_object__load failed for %s, error=%d\n", XDP_ENTRY_PROGRAM, error);
         goto Exit;
     }
     
     // Pin the program so that it is not unloaded when the daemon stops.
     if (bpf_program__pin(entry_program, XDP_PROGRAM_PIN_PATH) < 0) {
-        printf("Failed to pin entry program: %s\n", XDP_ENTRY_PROGRAM);
         error = errno;
+        printf("Failed to pin entry program: %s, error=%d\n", XDP_ENTRY_PROGRAM, error);
         goto Exit;
     }
-    
     program_pinned = true;
 
     // Populate tail call map.
     error = _populate_tail_call_map(object);
     if (error != ERROR_SUCCESS) {
+        printf("Failed to populate tail call map: %s, error=%d\n", XDP_ENTRY_PROGRAM, error);
         goto Exit;
     }
     tail_call_map_populated = true;
@@ -477,6 +491,7 @@ _load_and_attach_xdp_program(_In_ const char* file)
     link = bpf_program__attach(entry_program);
     if (!link) {
         error = errno;
+        printf("Failed to attach to program: %s, error=%d\n", XDP_ENTRY_PROGRAM, error);
         goto Exit;
     }
     program_attached = true;
@@ -484,16 +499,20 @@ _load_and_attach_xdp_program(_In_ const char* file)
 Exit:
     if (error != ERROR_SUCCESS) {
         if (program_pinned) {
+            printf("Unpinning the program: %s\n", XDP_PROGRAM_PIN_PATH);
             (void)ebpf_object_unpin(XDP_PROGRAM_PIN_PATH);
         }
         if (program_attached) {
+            printf("Detaching the program: %s\n", XDP_ENTRY_PROGRAM);
             bpf_link__destroy(link);
         }
         if (tail_call_map_populated) {
-            // _clean_tail_call_map();
+            printf("Cleaning up tail call map: %s\n", CILIUM_TAIL_CALL_MAP);
+            _clean_tail_call_map_state();
         }
     }
     if (object != nullptr) {
+        printf("Closing the object: %s\n", file);
         bpf_object__close(object);
     }
     return error;
@@ -540,6 +559,7 @@ _clean_tail_call_map_state()
     std::string pin_path = get_map_pin_path(CILIUM_TAIL_CALL_MAP);
     fd_t map_fd = bpf_obj_get(pin_path.c_str());
     if (map_fd == ebpf_fd_invalid) {
+        // Map not found. Nothing to do.
         error = ERROR_NOT_FOUND;
         goto Exit;
     }
