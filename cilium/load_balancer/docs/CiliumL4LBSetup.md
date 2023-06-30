@@ -77,7 +77,7 @@ The following steps describe how to setup the LB node VM:
 3. Enable test signing by running command ``"bcdedit -set testsigning on"``. This command needs to be run as Administrator.
 4. Create a folder ``C:\ebpf`` on the LB node.
 5. Copy all the files from the build directory (`ebpf-for-windows-demo`) mentioned in the previous section to ``C:\ebpf``
-6. Install ``ebpf-for-windows.<version>`` on the LB node using Windows Installer Package from [here](https://github.com/microsoft/ebpf-for-windows/releases). Download ``ebpf-for-windows.<version>.msi``. Also download and install ``Microsoft Visual C++ Redistributable (x64)`` exe. ebpf-for-windows will be installed in ``C:\Program Files\ebpf-for-windows``
+6. Install [ebpf-for-windows.\<version\>](https://github.com/microsoft/ebpf-for-windows/blob/main/docs/InstallEbpf.md#method-1-install-a-release-with-the-msi-installer) on the LB node using Windows Installer Package. ebpf-for-windows will be installed in ``C:\Program Files\ebpf-for-windows`` and the services: ```netebpfext, ebpfcore and ebpfsvc``` will be started.
 
 #### Set Up Windows Backend Node(s)
 
