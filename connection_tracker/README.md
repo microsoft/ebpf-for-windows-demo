@@ -23,8 +23,8 @@ The project provides a real-time list of connections that have been completed al
 8) Netsh tools can be used to examine the native eBPF program: ```netsh ebpf show sections conn_track.sys```.
 
 ### BPF_PROG_TYPE_SOCK_OPS and BPF_MAP_TYPE_RINGBUF demo
-1) Build the ebpf-for-windows-demo as outlined in [Getting Started](https://github.com/microsoft/ebpf-for-windows-demo/blob/main/docs/GettingStarted.md).
-2) [Install eBPF-For-Windows with the msi installer](https://github.com/microsoft/ebpf-for-windows/blob/main/docs/InstallEbpf.md#method-1-install-a-release-with-the-msi-installer) on the target machine.
+1) Build the ```ebpf-for-windows-demo``` as outlined in [Getting Started](https://github.com/microsoft/ebpf-for-windows-demo/blob/main/docs/GettingStarted.md).
+2) [Install eBPF-For-Windows with the msi installer](https://github.com/microsoft/ebpf-for-windows/blob/main/docs/InstallEbpf.md#method-1-install-a-release-with-the-msi-installer) on the target machine. This should start netebpfext, ebpfcore and ebpfsvc services.
 3) Copy conn_track.sys and conn_tracker.exe to the target machine.
 4) Launch conn_tracker.exe.
 5) Launch a browser and navigate to any website.
