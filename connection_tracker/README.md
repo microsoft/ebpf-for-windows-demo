@@ -10,18 +10,6 @@ This project demonstrates the following features in eBPF-For-Windows:
 The project provides a real-time list of connections that have been completed along with the source, destination, and duration of each connection.
 
 ## Demo Steps
-### Native eBPF program generation
-``SKIP:`` These steps are already performed as part of the build process for the project and are repeated here for clarity. Move to the next section to begin.
-
-1) Launch a "Developer Command Prompt for VS 2019".
-2) For convenience, set an environment variable to point to the root of the eBPF nuget package: ```set EBPF_ROOT=<your workspace path>\ebpf-for-windows-demo\packages\eBPF-for-Windows.<version>\build\native```. Note: This is an example path, replace this with your own path.
-3) Change directory to connection_tracker\bpf: ```cd connection_tracker\bpf```.
-4) Create a directory to hold build output: ```md out```.
-5) Build the eBPF program to an ELF file: ```clang -g -target bpf -O2 -Werror -I%EBPF_ROOT%\include -c conn_track.c -o out\conn_track.o```.
-6) Invoke the powershell script to build the native image: ```cd out && powershell -NonInteractive -ExecutionPolicy Unrestricted %EBPF_ROOT%\bin\Convert-BpfToNative.ps1 -FileName conn_track.o```.
-7) This produces the native eBPF program conn_track.sys.
-8) Netsh tools can be used to examine the native eBPF program: ```netsh ebpf show sections conn_track.sys```.
-
 ### BPF_PROG_TYPE_SOCK_OPS and BPF_MAP_TYPE_RINGBUF demo
 1) Build the ```ebpf-for-windows-demo``` as outlined in [Getting Started](https://github.com/microsoft/ebpf-for-windows-demo/blob/main/docs/GettingStarted.md).
 2) [Install eBPF-For-Windows with the msi installer](https://github.com/microsoft/ebpf-for-windows/blob/main/docs/InstallEbpf.md#method-1-install-a-release-with-the-msi-installer) on the target machine. This should start netebpfext, ebpfcore and ebpfsvc services.
