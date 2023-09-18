@@ -86,8 +86,8 @@ jobs:
       id: configure_ebpf_store
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
-        packages\eBPF-for-Windows.0.10.0\build\native\bin\export_program_info.exe --clear
-        packages\eBPF-for-Windows.0.10.0\build\native\bin\export_program_info.exe
+        packages\eBPF-for-Windows.0.11.0\build\native\bin\export_program_info.exe --clear
+        packages\eBPF-for-Windows.0.11.0\build\native\bin\export_program_info.exe
 
     - name: Build eBPF-for-Windows-Demo
       working-directory: ${{env.GITHUB_WORKSPACE}}
