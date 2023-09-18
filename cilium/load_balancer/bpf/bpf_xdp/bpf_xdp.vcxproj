@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
 -->
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\..\packages\eBPF-for-Windows.0.9.0\build\native\ebpf-for-windows.props" Condition="Exists('..\..\..\..\packages\eBPF-for-Windows.0.9.0\build\native\ebpf-for-windows.props')" />
+  <Import Project="..\..\..\..\packages\eBPF-for-Windows.0.11.0\build\native\ebpf-for-windows.props" Condition="Exists('..\..\..\..\packages\eBPF-for-Windows.0.11.0\build\native\ebpf-for-windows.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -156,11 +156,14 @@ xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$
         mkdir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object
         clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer $(ClangIncludes) -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_dsr.o -DEBPF_FOR_WINDOWS -DMODE_DSR
         clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer $(ClangIncludes) -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_snat.o -DEBPF_FOR_WINDOWS -DMODE_SNAT
+
+        powershell -NonInteractive -ExecutionPolicy Unrestricted $(SolutionDir)packages\eBPF-for-Windows.0.11.0\build\native\bin\Convert-BpfToNative.ps1 -FileName bpf_xdp_snat.o -type xdp -IncludeDir $(SolutionDir)packages\eBPF-for-Windows.0.11.0\build\native\include -OutDir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object -Platform $(Platform) -Configuration $(Configuration)
+        powershell -NonInteractive -ExecutionPolicy Unrestricted $(SolutionDir)packages\eBPF-for-Windows.0.11.0\build\native\bin\Convert-BpfToNative.ps1 -FileName bpf_xdp_dsr.o -type xdp -IncludeDir $(SolutionDir)packages\eBPF-for-Windows.0.11.0\build\native\include -OutDir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object -Platform $(Platform) -Configuration $(Configuration)
       </Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>$(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_dsr.o;$(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_snat.o;%(Outputs)</Outputs>
-      <Message>Compile Cilium XDP program for SNAT and DSR</Message>
+      <Message>Build Cilium XDP program for SNAT and DSR</Message>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -203,6 +206,9 @@ xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$
         mkdir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object
         clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer $(ClangIncludes) -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_dsr.o -DEBPF_FOR_WINDOWS -DMODE_DSR
         clang -g -O2 -target bpf -mcpu=v1 -std=gnu89 -nostdinc -D__NR_CPUS__=4 -Wextra -Werror -Wshadow -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-gnu-variable-sized-type-not-at-end -Wdeclaration-after-statement -DSECLABEL=2 -DNODE_MAC={.addr={0x0,0x15,0x5d,0x6e,0x85,0x4}} -DCALLS_MAP=cilium_calls_xdp -Dcapture_enabled=0 -DDISABLE_LOOPBACK_LB -DNATIVE_DEV_IFINDEX=2 -I$(SolutionDir)cilium\load_balancer\bpf -I$(SolutionDir)external\cilium\bpf -I$(SolutionDir)external\cilium\bpf\include -I$(SolutionDir)cilium\load_balancer $(ClangIncludes) -c $(SolutionDir)external\cilium\bpf\bpf_xdp.c -o $(SolutionDir)$(Platform)\$(Configuration)\cilium\object\bpf_xdp_snat.o -DEBPF_FOR_WINDOWS -DMODE_SNAT
+
+        powershell -NonInteractive -ExecutionPolicy Unrestricted $(SolutionDir)packages\eBPF-for-Windows.0.11.0\build\native\bin\Convert-BpfToNative.ps1 -FileName bpf_xdp_snat.o -type xdp -IncludeDir $(SolutionDir)packages\eBPF-for-Windows.0.11.0\build\native\include -OutDir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object -Platform $(Platform) -Configuration $(Configuration)
+        powershell -NonInteractive -ExecutionPolicy Unrestricted $(SolutionDir)packages\eBPF-for-Windows.0.11.0\build\native\bin\Convert-BpfToNative.ps1 -FileName bpf_xdp_dsr.o -type xdp -IncludeDir $(SolutionDir)packages\eBPF-for-Windows.0.11.0\build\native\include -OutDir $(SolutionDir)$(Platform)\$(Configuration)\cilium\object -Platform $(Platform) -Configuration $(Configuration)
       </Command>
     </CustomBuildStep>
     <CustomBuildStep>
@@ -216,6 +222,6 @@ xcopy $(SolutionDir)cilium\load_balancer\bpf\netdev_config_dsr.h $(SolutionDir)$
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\packages\eBPF-for-Windows.0.9.0\build\native\ebpf-for-windows.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\eBPF-for-Windows.0.9.0\build\native\ebpf-for-windows.props'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\eBPF-for-Windows.0.11.0\build\native\ebpf-for-windows.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\eBPF-for-Windows.0.11.0\build\native\ebpf-for-windows.props'))" />
   </Target>
 </Project>
