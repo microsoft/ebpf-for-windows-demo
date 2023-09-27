@@ -113,7 +113,9 @@ jobs:
         retention-days: 5
 
     # Run tests only for 'schedule' and 'pull_request'
-    - name: Run Cilium XDP Tests
-      if: github.event_name == 'schedule' || github.event_name == 'pull_request'
-      working-directory: ./${{env.BUILD_PLATFORM}}/${{env.BUILD_CONFIGURATION}}
-      run: ./cilium_test.exe -s
+    # Re-enable this tests once next version of eBPF-for-Windows is released.
+    # Tracked by GitHub issue #91
+    # - name: Run Cilium XDP Tests
+    #   if: github.event_name == 'schedule' || github.event_name == 'pull_request'
+    #   working-directory: ./${{env.BUILD_PLATFORM}}/${{env.BUILD_CONFIGURATION}}
+    #   run: ./cilium_test.exe -s
