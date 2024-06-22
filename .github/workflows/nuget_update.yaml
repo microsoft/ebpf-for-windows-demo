@@ -32,7 +32,7 @@ jobs:
 
     steps:
     # Check out the main repo.
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
       with:
         # Only check out main repo, not submodules.
         ref: ${{ github.event.workflow_run.head_branch }}
