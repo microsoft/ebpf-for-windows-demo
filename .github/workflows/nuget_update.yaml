@@ -50,7 +50,7 @@ jobs:
 
     # Create a pull request with the changes.
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38
+      uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: Update NuGet packages
